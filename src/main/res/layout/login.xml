@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_below="@id/usercode_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp"
+            android:background="@mipmap/log_in"
+            android:text="登          录"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/login_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_button"
+            android:layout_alignRight="@+id/login_button"
+            android:background="#00000000"
+            android:text="忘记密码"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_button"
+            android:layout_alignLeft="@+id/login_button"
+            android:background="#00000000"
+            android:gravity="left|center_vertical"
+            android:text="注册"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/usercode_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username_layout"
+            android:layout_marginTop="6dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/passwordeye"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/eye" />
+
+            <EditText
+                android:id="@+id/userpassword_edit"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:paddingLeft="55dp"
+                android:paddingRight="60dp"
+                >
+
+            </EditText>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="22dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginStart="7dp"
+                android:background="@mipmap/password" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/username_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/username_edit"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="账号/手机号/邮箱"
+                android:maxLength="20"
+                android:paddingLeft="55dp"
+
+                android:paddingRight="60dp">
+
+            </EditText>
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="21dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="8dp"
+                android:background="@mipmap/user"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/contry_sn"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="+62"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+        </FrameLayout>
+    </RelativeLayout>
+</RelativeLayout>
