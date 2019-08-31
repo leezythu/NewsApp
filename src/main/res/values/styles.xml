@@ -1,0 +1,50 @@
+
+
+<resources>
+
+    <!-- Base application theme. -->
+    <attr name="appbg" format="reference"/>
+    <attr name="tool_bar" format="reference"/>
+    <attr name="tab" format="reference"/>
+    <attr name="textcolor" format="reference"/>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item><!--toolbar标题字体大小-->
+        <item name="android:textColor">#ffffff</item><!--toolbar标题字体颜色-->
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@android:color/background_light</item>
+    </style>
+    <style name="MyTabLayoutTextAppearanceInverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@android:color/background_light</item>
+    </style>
+
+    <!-- 默认风格 -->
+    <style name="Default" parent="@android:style/Theme">
+        <item name="appbg">@color/white</item>
+        <item name="tool_bar">@color/blueviolet</item>
+        <item name="tab">@color/mediumpurple</item>
+        <item name="textcolor">@color/black</item>
+    </style>
+
+    <!-- 夜间模式 -->
+    <style name="ThemeNight" parent="@android:style/Theme">
+        <item name="appbg">@color/black</item>
+        <item name="textcolor">@color/white</item>
+    </style>
+</resources>
