@@ -32,6 +32,10 @@
     <string name="tab_text_qiche">汽车</string>
     <string name="tab_text_wenhua">文化</string>
 
+    <string name="bottom_share">share</string>
+    <string name="bottom_favorate">favorate</string>
+    <string name="bottom_blocking">block</string>
+
     <string name="title_activity_single_news">SingleNews</string>
     <string name="title_login">SingleNews</string>
     <string name="large_text">
