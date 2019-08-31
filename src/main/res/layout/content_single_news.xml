@@ -19,10 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"  />
 
         <TextView
             android:layout_width="match_parent"

@@ -1,10 +1,12 @@
 package com.zhenyu.zhenyu;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.nostra13.universalimageloader.utils.L;
@@ -16,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private LinearLayout blockinglayout;
 //    private TextView titleview;
 //    private TextView contentview;
+    private ImageView moreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +54,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 //        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
 ////        toolbar.setLogo(R.drawable.ic_launcher_background);
 //        setSupportActionBar(toolbar);
-
-
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                bottomSheetBehavior.show();
-////                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//            }
-//        });
 
 
         Intent intent = getIntent();
@@ -105,6 +97,9 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 
     public void initbottonsheet(){
 
+        moreview = findViewById(R.id.moreaction);
+        moreview.setOnClickListener(this);
+
         bottomsheetlayout = (LinearLayout) findViewById(R.id.bottomsheet);
         bottomSheetBehavior = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
@@ -133,6 +128,8 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
             case R.id.blocking_item:
                 Toast.makeText(getApplicationContext(), "click blocking", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.moreaction:
+                bottomSheetBehavior.show();
             default:
                     break;
         }
