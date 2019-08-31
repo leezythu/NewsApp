@@ -22,13 +22,13 @@ public class NewsListHolder extends RecyclerView.ViewHolder {
         super(itemview);
         titleView = (TextView)itemview.findViewById(R.id.news_title);
         dateView = (TextView)itemview.findViewById(R.id.news_date);
-//        categoryv = (TextView)itemview.findViewById(R.id.categoryview);
+        categoryv = (TextView)itemview.findViewById(R.id.news_category);
     }
 
     public void bindData(NewsEntity newsEntity){
         titleView.setText(newsEntity.getTitle());
         dateView.setText(newsEntity.getPublishTime());
-//        categoryv.setText("categoty:"+newsEntity.getCategories());
+        categoryv.setText(newsEntity.getCategories());
         idx = newsEntity.getNewsid();
 
     }

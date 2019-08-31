@@ -30,6 +30,7 @@
     <string name="tab_text_jiaoyu">教育</string>
     <string name="tab_text_shehui">社会</string>
     <string name="tab_text_qiche">汽车</string>
+    <string name="tab_text_wenhua">文化</string>
 
     <string name="title_activity_single_news">SingleNews</string>
     <string name="title_login">SingleNews</string>
