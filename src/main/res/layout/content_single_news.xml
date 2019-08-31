@@ -14,11 +14,21 @@
         android:layout_margin="16dp"
         android:orientation="vertical">
 
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
+            android:layout_height="30dp" />
 
-            <TextView
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"  />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/titleview"
@@ -48,8 +58,9 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@android:color/darker_gray"  />
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="5dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

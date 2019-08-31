@@ -36,6 +36,8 @@
     <string name="bottom_favorate">favorate</string>
     <string name="bottom_blocking">block</string>
 
+    <string name="appTitle">NewestNews</string>
+
     <string name="title_activity_single_news">SingleNews</string>
     <string name="title_login">SingleNews</string>
     <string name="large_text">

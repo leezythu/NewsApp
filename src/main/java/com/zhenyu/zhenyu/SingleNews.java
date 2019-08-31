@@ -40,24 +40,28 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_news);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("NewsApp");
-        toolbar.bringToFront();
-//        toolbar.setSubtitle("这里是子标题");
-        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
-//        toolbar.setLogo(R.drawable.ic_launcher_background);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                bottomSheetBehavior.show();
-//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setTitle("NewsApp");
+//        toolbar.bringToFront();
+////        toolbar.setSubtitle("这里是子标题");
+//        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
+////        toolbar.setLogo(R.drawable.ic_launcher_background);
+//        setSupportActionBar(toolbar);
+
+
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                bottomSheetBehavior.show();
+////                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            }
+//        });
 
 
         Intent intent = getIntent();
@@ -83,7 +87,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         Matcher matcher = pattern.matcher(rawcontent);
         String replacement = "\n        ";
         StringBuffer strn = new StringBuffer();
-        strn.append("  ");
+        strn.append("        ");
         while (matcher.find()){
             matcher.appendReplacement(strn, replacement);
         }

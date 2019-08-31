@@ -10,7 +10,7 @@
         style="?attr/bottomSheetStyle"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="16dp"
+        android:paddingTop="10dp"
         android:orientation="vertical">
 
         <!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"-->
@@ -20,7 +20,7 @@
             android:id="@+id/share_item"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:gravity="start|center"
             android:orientation="horizontal"
             android:clickable="true"
             android:focusable="true"
@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:orientation="horizontal"
+            android:gravity="start|center"
             android:clickable="true"
             android:focusable="true"
             android:layout_gravity="center"
@@ -71,7 +72,7 @@
             android:orientation="horizontal"
             android:clickable="true"
             android:focusable="true"
-            android:layout_gravity="center"
+            android:gravity="start|center"
             android:background="?attr/selectableItemBackground">
             <ImageView
                 android:layout_width="24dp"

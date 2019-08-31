@@ -7,34 +7,67 @@
     android:fitsSystemWindows="true"
     tools:context=".SingleNews">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll"
-        android:gravity="center"
-        android:layout_gravity="top">
 
-    </androidx.appcompat.widget.Toolbar>
-    <EditText
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@drawable/round_more_horiz_24">
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:text="NewsAPP"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+    </com.google.android.material.appbar.MaterialToolbar>
 
-    </EditText>
+<!--    -->
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?android:attr/actionBarSize"-->
+<!--        android:background="@color/white"-->
+<!--        app:layout_scrollFlags="scroll"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_gravity="top">-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/appTitle"-->
+<!--                android:textColorHighlight="@color/black"-->
+<!--                android:textSize="20sp" />-->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/toolbar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:clickable="true"-->
+<!--                android:contentDescription="more"-->
+<!--                android:focusable="true"-->
+<!--                android:src="@drawable/round_more_horiz_24"-->
+<!--                app:layout_anchor="@+id/toolbar"-->
+<!--                app:layout_anchorGravity="center|right|end" />-->
+
+<!--        </LinearLayout>-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
 
     <include layout="@layout/content_single_news" />
 
-
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/fab_margin"-->
+<!--        app:layout_anchor="@id/toolbar"-->
+<!--        app:layout_anchorGravity="bottom|end"-->
+<!--        app:srcCompat="@drawable/round_dashboard_24"-->
+<!--        android:visibility="gone"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
