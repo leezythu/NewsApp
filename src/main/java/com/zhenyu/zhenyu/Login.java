@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import androidx.lifecycle.Observer;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +21,7 @@ import com.zhenyu.zhenyu.DataRepository;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.R;
+
 import com.zhenyu.zhenyu.RequestData.Reception;
 import com.zhenyu.zhenyu.user.UserProfile;
 import com.zhenyu.zhenyu.utils.LogController;
@@ -42,18 +45,23 @@ public class Login extends AppCompatActivity {
             }
         });
 
+
         Button r_button= (Button) findViewById(R.id.register);
         Button  l_button=(Button) findViewById(R.id.login_button);
         r_button.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "注册成功！\n用户名："+username.getText().toString()+"\n"+"密码："+password.getText().toString(),Toast.LENGTH_LONG).show();
                 Reception.usrRegister(username.getText().toString(), password.getText().toString());
+
+
             }
         });
         l_button.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "登录成功！\n用户名："+username.getText().toString()+"\n"+"密码："+password.getText().toString(),Toast.LENGTH_LONG).show();
+                 Toast.makeText(getApplicationContext(), "登录成功！\n用户名："+username.getText().toString()+"\n"+"密码："+password.getText().toString(),Toast.LENGTH_LONG).show();
                 Reception.usrLogin(username.getText().toString(), password.getText().toString());
+
+
             }
         });
     }

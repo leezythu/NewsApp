@@ -3,6 +3,7 @@ package com.zhenyu.zhenyu.RequestData;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.Login;
 
+
 import java.util.Map;
 
 import retrofit2.Call;
@@ -28,5 +29,7 @@ public interface GetRequest_Interfece {
     Call<NewsEntity> pullFavorate();
 
     @POST("add")
+
     Call<LoginEntity> uploadNew(@QueryMap Map<String, String> param);
+
 }
