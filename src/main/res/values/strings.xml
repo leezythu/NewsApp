@@ -17,7 +17,7 @@
     <string name="menu_send">Send</string>
     <string name="menu_history">历史记录</string>
     <string name="menu_collection">收藏</string>
-    <string name="menu_night">收藏</string>
+    <string name="menu_night">夜间模式</string>
 
     <string name="tab_text_shouye">首页</string>
     <string name="tab_text_tuijian">推荐</string>
@@ -32,7 +32,13 @@
     <string name="tab_text_qiche">汽车</string>
 
     <string name="title_activity_single_news">SingleNews</string>
-    <string name="title_login">SingleNews</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_reversetab">Tab</string>
+    <string name="drawer_btn_rss">栏目管理</string>
+    <string name="subscribe_my_category">切换栏目</string>
+    <string name="subscribe_more_category">更多栏目</string>
+    <string name="subscribe_manager_category_info">单击增删栏目</string>
+    <string name="subscribe_manager_category_info_2">单击增删栏目，长按拖拽排序</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

@@ -17,7 +17,11 @@
         android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Login"
-            android:label="@string/title_login"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ReverseTab"
+            android:label="@string/title_activity_reversetab"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
