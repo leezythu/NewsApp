@@ -1,22 +1,19 @@
 package com.zhenyu.zhenyu;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -24,22 +21,6 @@ import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.viewpager.widget.ViewPager;
-
-import android.view.Menu;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
