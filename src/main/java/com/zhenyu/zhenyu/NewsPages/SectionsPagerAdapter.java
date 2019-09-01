@@ -43,6 +43,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public SectionsPagerAdapter(Context context, ArrayList<Integer>cur, ArrayList<Integer>notuse, FragmentManager fm) {
+
         super(fm);
         count=cur.size();
         this.cur=cur;
