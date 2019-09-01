@@ -7,20 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:theme="@style/AppTheme.AppBarOverlay">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:layout_marginTop="0dp"
-            android:background="@color/mediumpurple"
-          />
+            android:background="@color/mediumpurple" />
+
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--        android:id="@+id/fab"-->

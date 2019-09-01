@@ -114,7 +114,6 @@ public class PlaceHolderFragment extends Fragment {
 
         final RecyclerView newsRecycler = root.findViewById(R.id.newslist);
         newsRecycler.setAdapter(mnewsAdapter);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         newsRecycler.setLayoutManager(layoutManager);
 
