@@ -1,34 +1,37 @@
 package com.zhenyu.zhenyu;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil;
+import com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.*;
 import android.content.Intent;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.nostra13.universalimageloader.utils.L;
-import com.zhenyu.zhenyu.Database.AppDatabase;
-import com.zhenyu.zhenyu.Database.NewsEntity;
-import com.zhenyu.zhenyu.user.UserProfile;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.zhenyu.zhenyu.Database.AppDatabase;
+import com.zhenyu.zhenyu.Database.NewsEntity;
+import com.zhenyu.zhenyu.user.UserProfile;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.resourceIdToUri;
+import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareText;
 
 public class SingleNews extends AppCompatActivity implements View.OnClickListener{
 
@@ -42,6 +45,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 //    private TextView titleview;
 //    private TextView contentview;
     private ImageView moreview;
+    private NewsEntity entity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         initbottonsheet();
     }
     public void initpage(){
-        NewsEntity entity = dataRepository.loadNewsById(newsid);
+        entity = dataRepository.loadNewsById(newsid);
 //        Toast.makeText(getApplicationContext(), entity.getContent(), Toast.LENGTH_LONG).show();
 //        assert titleview != null;
 
@@ -147,12 +151,21 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.share_item:
-                Intent shareintent = new Intent(Intent.ACTION_SEND);
-//                shareintent.setPackage()
+                if (!ShareMultiImageToWeChatUtil.isInstallWeChart(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), "您没有安装微信", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    if (entity.getImage() == null || entity.getImage().equals("")) {
+                        shareText(getApplicationContext(), entity.getContent());
+                    } else {
+                        ImageLoader imageLoader = ImageLoader.getInstance();
+//                        Uri uri = ShareMultiImageToWeChatUtil.saveImageToGallery(getApplicationContext(),resource);
+//                        ShareMultiImageToWeChatUtil.shareWithImage(getApplicationContext(), entity.getTitle(), uri);
+                    }
+                }
                 Toast.makeText(getApplicationContext(), "click share", Toast.LENGTH_LONG).show();
                 break;
             case R.id.favorate_item:
-                NewsEntity entity = dataRepository.loadNewsById(newsid);
                 entity.setFlag(1);
                 dataRepository.addNewsToBrowsedNews(entity);
                 Toast.makeText(getApplicationContext(), "added to favorate news", Toast.LENGTH_LONG).show();

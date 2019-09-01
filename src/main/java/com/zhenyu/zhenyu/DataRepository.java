@@ -96,5 +96,7 @@ public class DataRepository {
     public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getall(); }
     public LiveData<List<BrowsedNews>> getLikedNews(){ return appDatabase.getBrowsedNewsDao().getLikedNews(); }
 
+    public LiveData<List<NewsEntity>> getSearchResult(String keyword){ return appDatabase.getNewsEntityDao().searchNewsByOneKeyword(keyword);}
+
 }
 
