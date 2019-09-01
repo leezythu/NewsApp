@@ -1,27 +1,12 @@
 package com.zhenyu.zhenyu;
 
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.Context;
-
-
-
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.Window;
-
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,17 +28,6 @@ import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
-
-
-
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-
 
 import java.util.ArrayList;
 
@@ -132,9 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putIntegerArrayList("notuse_tabs", notuse);
                 intent.putExtras(bundle);
 
-
                 startActivityForResult(intent, 0);
-
 
             }
         });

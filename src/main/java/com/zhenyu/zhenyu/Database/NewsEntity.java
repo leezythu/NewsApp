@@ -51,6 +51,12 @@ public class NewsEntity {
     @ColumnInfo(name = "publisher")
     private String publisher = "";
 
+    @ColumnInfo(name = "hfflag")
+    private int hfflag; // 0 is not clicked , 1 is clicked, 2 is favorate
+
+    @ColumnInfo(name = "viewTime")
+    private long viewTime;
+
 
     public NewsEntity(){
         this.newsid = "1"; this.stringkeywords = "";
@@ -59,6 +65,8 @@ public class NewsEntity {
         this.image = "";
         entryTime = 1111111;
         publisher = "";
+        hfflag = 0;
+        viewTime = 0;
     }
 
     public NewsEntity(String newsid, String image, String publishTime, String title,
@@ -74,6 +82,8 @@ public class NewsEntity {
         this.stringkeywords = stringkeywords;
         this.entryTime = entryTime;
         this.publisher = publisher;
+        this.viewTime = entryTime;
+        this.hfflag = 0;
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}
@@ -87,6 +97,8 @@ public class NewsEntity {
     public void setFlag(int flag){ this.flag = flag; }
     public void setStringkeywords(String stringkeywords){ this.stringkeywords = stringkeywords; }
     public void setEntryTime(long entryTime){ this.entryTime = entryTime; }
+    public void setHfflag(int hfflag){ this.hfflag = hfflag;}
+    public void setViewTime(long viewTime){ this.viewTime = viewTime; }
 
     public String getPublisher(){return  this.publisher;}
     public String getNewsid(){return this.newsid;}
@@ -99,4 +111,11 @@ public class NewsEntity {
     public int getFlag(){ return flag; }
     public String getStringkeywords() {return this.stringkeywords;}
     public long getEntryTime() {return entryTime; }
+
+    public int getHfflag() {
+        return hfflag;
+    }
+    public long getViewTime(){
+        return viewTime;
+    }
 }

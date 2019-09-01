@@ -28,7 +28,7 @@ public class AppExecutors {
     }
 
     public AppExecutors() {
-        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
+        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(5),
                 new MainThreadExecutor());
     }
 

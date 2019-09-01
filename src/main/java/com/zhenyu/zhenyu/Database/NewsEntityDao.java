@@ -10,6 +10,8 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import retrofit2.http.QueryMap;
+
 @Dao
 public interface NewsEntityDao {
     @Query("select * FROM AugustNews")
@@ -52,8 +54,19 @@ public interface NewsEntityDao {
     //For recommendation
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addRecommendedNews(NewsEntity newsEntity);
+
     @Query("select * FROM AugustNews where flag = 2 order by entryTime desc")
     LiveData<List<NewsEntity>> getRecommendedNews();
 
+    @Query("select * FROM AugustNews where hfflag = 1 order by viewTime desc")
+    LiveData<List<NewsEntity>> getHistorical();
+    @Query("select * FROM augustnews where hfflag = 2 order by viewTime desc")
+    LiveData<List<NewsEntity>> getliked();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addViewed(NewsEntity newsEntity);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addViewedAll(List<NewsEntity> newsEntity);
 
 }

@@ -1,5 +1,7 @@
 package com.zhenyu.zhenyu;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +11,7 @@ import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.BrowsedNews;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataRepository {
@@ -62,8 +65,15 @@ public class DataRepository {
     public void addNewsToNewsbase(List<NewsEntity> NewNews){
         appDatabase.getNewsEntityDao().addNewsAll(NewNews);
     }
-    public void addNewsToBrowsedNews(NewsEntity newsEntity){
-        appDatabase.getBrowsedNewsDao().addBrowesedNews(new BrowsedNews(newsEntity));
+//    void addNewsToBrowsedNews(NewsEntity newsEntity){
+//        appDatabase.getBrowsedNewsDao().addBrowesedNews(new BrowsedNews(newsEntity));
+//    }
+
+    void addNewsToBrowsedNews(NewsEntity newsEntity){
+        List<BrowsedNews> ww = new ArrayList<>();
+        ww.add(new BrowsedNews(newsEntity));
+        Log.i("add one news", "to browsed");
+        appDatabase.getBrowsedNewsDao().addBrowsedNewsAll(ww);
     }
 
     public int getDatabaseSize() {
@@ -79,8 +89,12 @@ public class DataRepository {
         return mObservableNews;
     }
     public LiveData<List<NewsEntity>> getCategoricalNews(String category){ return appDatabase.getNewsEntityDao().getCategoricalNews(category);}
+    public LiveData<List<NewsEntity>> getnewsHistorical(){return appDatabase.getNewsEntityDao().getHistorical();}
+    public LiveData<List<NewsEntity>> getnewsLiked(){return appDatabase.getNewsEntityDao().getliked();}
+    public void addnewsHis(NewsEntity newsEntity){ appDatabase.getNewsEntityDao().addViewed(newsEntity);}
 
-    public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getHistoryNews(); }
+    public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getall(); }
     public LiveData<List<BrowsedNews>> getLikedNews(){ return appDatabase.getBrowsedNewsDao().getLikedNews(); }
+
 }
 

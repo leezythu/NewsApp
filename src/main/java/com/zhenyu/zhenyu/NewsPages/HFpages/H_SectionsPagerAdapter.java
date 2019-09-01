@@ -1,10 +1,12 @@
-package com.zhenyu.zhenyu.NewsPages;
+package com.zhenyu.zhenyu.NewsPages.HFpages;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ public class H_SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceHolderFragment.newInstance(position + 1,TAB_CONTENT[cur.get(position)]);
+        return HFfragement.newInstance(position + 1,TAB_CONTENT[cur.get(position)]);
     }
     @Nullable
     @Override

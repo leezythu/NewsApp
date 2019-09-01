@@ -9,6 +9,8 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import retrofit2.http.QueryMap;
+
 @Dao
 public interface BrowsedNewsDao {
 
@@ -16,12 +18,18 @@ public interface BrowsedNewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addBrowesedNews(BrowsedNews news);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addBrowsedNewsAll(List<BrowsedNews> allnews);
+
 
     @Query("select * FROM BrowsedNews where flag = 1 order by entryTime desc")
     LiveData<List<BrowsedNews>> getLikedNews();
 
     @Query("select * FROM BrowsedNews where flag = 0 order by entryTime desc")
     LiveData<List<BrowsedNews>> getHistoryNews();
+
+    @Query("select * FROM browsednews")
+    LiveData<List<BrowsedNews>> getall();
 
     @Query("delete from BrowsedNews where newsid = :goneid")
     void deletenews(String goneid);

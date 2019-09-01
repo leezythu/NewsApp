@@ -1,12 +1,10 @@
-package com.zhenyu.zhenyu.NewsPages;
+package com.zhenyu.zhenyu.NewsPages.HFpages;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,43 +13,38 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhenyu.zhenyu.DataRepository;
-import com.zhenyu.zhenyu.R;
-import com.zhenyu.zhenyu.RequestData.Reception;
 import com.zhenyu.zhenyu.Database.AppDatabase;
-import com.zhenyu.zhenyu.Database.NewsEntity;
-import com.zhenyu.zhenyu.NewsPages.ViewListNews.NewsListAdapter;
+import com.zhenyu.zhenyu.Database.BrowsedNews;
+import com.zhenyu.zhenyu.NewsPages.HFpages.HFViewList.HFNewsListAdapter;
+import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
 import com.zhenyu.zhenyu.NewsPages.ViewListNews.RecyclerItemClickListener;
+import com.zhenyu.zhenyu.R;
 import com.zhenyu.zhenyu.SingleNews;
 import com.zhenyu.zhenyu.utils.DateControl;
 
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-public class PlaceHolderFragment extends Fragment {
+public class HFfragement  extends Fragment {
+    private static final String ARG_SECTION_NUMBER = "HFsection_number";
+    private static final String ARG_SECTION_CATEGORY = "HFsection_category";
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final String ARG_SECTION_CATEGORY = "section_category";
-
-    private PageViewModel pageViewModel;
+    private HFviewModel hf_pageViewModel;
 
     private int cnt = 0;
     private DataRepository dataRepository;
-    private NewsListAdapter mnewsAdapter;
+    private HFNewsListAdapter mnewsAdapter;
     private String CategoryS;
     private DateControl dateControl;
     private int mflag;
 
 
-    public static PlaceHolderFragment newInstance(int index, String category) {
-        PlaceHolderFragment fragment = new PlaceHolderFragment();
+    public static HFfragement newInstance(int index, String category) {
+        HFfragement fragment = new HFfragement();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         bundle.putString(ARG_SECTION_CATEGORY, category);
@@ -62,14 +55,13 @@ public class PlaceHolderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
+        hf_pageViewModel = ViewModelProviders.of(this).get(HFviewModel.class);
         if (getArguments() != null) {
             CategoryS = getArguments().getString(ARG_SECTION_CATEGORY);
+            hf_pageViewModel.setmObservableNews(CategoryS);
         }
-        pageViewModel.setCategoricalLiveData(CategoryS);
-        Reception.getReception(getContext());
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
-        mnewsAdapter = new NewsListAdapter();
+        mnewsAdapter = new HFNewsListAdapter();
         dateControl = new DateControl();
     }
 
@@ -83,33 +75,16 @@ public class PlaceHolderFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 
-                String enddate = dateControl.getFormatDate();
-                String startdate = dateControl.backday();
-                if(CategoryS.equals("首页"))
-                    Reception.request(null, null, startdate, enddate, 0);
-                else if(CategoryS.equals("推荐"))
-                    Reception.requestRecommended(null, null, startdate, enddate);
-                else
-                    Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
                 refreshlayout.finishRefresh(1000/*,false*/);//传入false表示刷新失败
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                String enddate = dateControl.getFormatDate();
-                String startdate = dateControl.backday();
-                if(CategoryS.equals("首页"))
-                    Reception.request(null, null, startdate, enddate, 0);
-                else if(CategoryS.equals("推荐"))
-                    Reception.requestRecommended(null, null, startdate, enddate);
-                else
-                    Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
+
                 refreshlayout.finishLoadMore(1000/*,false*/);//传入false表示加载失败
             }
         });
-
-
 
 
         final RecyclerView newsRecycler = root.findViewById(R.id.newslist);
@@ -123,7 +98,7 @@ public class PlaceHolderFragment extends Fragment {
                 new RecyclerItemClickListener(getContext(), newsRecycler ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         // do whatever
-//                        Toast.makeText(getContext(), "on click item:" + mnewsAdapter.getHolderId(position), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "on click item:" + mnewsAdapter.getHolderId(position), Toast.LENGTH_LONG).show();
 
                         String newpageid = mnewsAdapter.getHolderId(position);
 //                        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
@@ -144,15 +119,15 @@ public class PlaceHolderFragment extends Fragment {
                 })
         );
 
-        pageViewModel.getNews().observe(this, new Observer<List<NewsEntity>>() {
+        hf_pageViewModel.getNews().observe(this, new Observer<List<BrowsedNews>>() {
             @Override
-            public void onChanged(List<NewsEntity> newsEntities) {
+            public void onChanged(List<BrowsedNews> newsEntities) {
                 String w = "";
                 try{
                     w = newsEntities.get(0).getTitle();
-                    mnewsAdapter.setNewsData(pageViewModel.getNews().getValue());
+                    mnewsAdapter.setNewsData(hf_pageViewModel.getNews().getValue());
 //                    textView.setText(cnt + " " + w + dataRepository.getDatabaseSize() + " " + pageViewModel.getsize());
-                    cnt += 1;
+                    Toast.makeText(getContext(), "current news:"+String.valueOf(hf_pageViewModel.getsize()),Toast.LENGTH_LONG).show();
                 }catch (Exception e){
 //                    textView.setText("error in viewModel," + e.getMessage());
                 }
