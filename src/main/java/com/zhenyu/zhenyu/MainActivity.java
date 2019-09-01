@@ -1,10 +1,11 @@
 package com.zhenyu.zhenyu;
 
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
+
 
 
 
@@ -15,7 +16,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+
+import android.view.Window;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,10 +37,18 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
+
+
+
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
 
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -50,11 +63,16 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
-    private ArrayList<Integer>current=new ArrayList<Integer>();
-    private ArrayList<Integer>notuse=new ArrayList<Integer>();
+
+
+    private ArrayList<Integer> current = new ArrayList<Integer>();
+    private ArrayList<Integer> notuse = new ArrayList<Integer>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         this.setTheme(R.style.Default);
         setContentView(R.layout.activity_main);
@@ -67,13 +85,15 @@ public class MainActivity extends AppCompatActivity {
         initLogin();
     }
 
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         Bundle bundle = data.getExtras();
-        current=bundle.getIntegerArrayList("current_tabs");
-        notuse=bundle.getIntegerArrayList("notuse_tabs");
-        Toast.makeText(getApplicationContext(), current.toString(),Toast.LENGTH_LONG).show();
+        current = bundle.getIntegerArrayList("current_tabs");
+        notuse = bundle.getIntegerArrayList("notuse_tabs");
+        Toast.makeText(getApplicationContext(), current.toString(), Toast.LENGTH_LONG).show();
+
         sectionsPagerAdapter.set_cur(current);
         sectionsPagerAdapter.set_notuse(notuse);
         sectionsPagerAdapter.notifyDataSetChanged();
@@ -81,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void initTabs(){
+
+    public void initTabs() {
+
         current.add(0);
         current.add(1);
         current.add(2);
@@ -96,18 +118,23 @@ public class MainActivity extends AppCompatActivity {
         notuse.add(10);
         notuse.add(11);
 
-        FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.tab_fab);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.tab_fab);
+
         fab.bringToFront();
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 //                Toast.makeText(getApplicationContext(), "您点击了fab",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), ReverseTab.class);
                 Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("current_tabs",current);
-                bundle.putIntegerArrayList("notuse_tabs",notuse);
+                bundle.putIntegerArrayList("current_tabs", current);
+                bundle.putIntegerArrayList("notuse_tabs", notuse);
                 intent.putExtras(bundle);
 
-                startActivityForResult(intent,0);
+
+                startActivityForResult(intent, 0);
+
 
             }
         });
@@ -115,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void initViewPage() {
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(this, current,notuse,getSupportFragmentManager());
+        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(configuration);
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, current, notuse, getSupportFragmentManager());
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -137,26 +166,28 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void initImageLoader(){
+    public void initImageLoader() {
 
     }
-    public void initLogin(){
-       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-       navigationView.bringToFront();
-       View headview=navigationView.inflateHeaderView(R.layout.nav_header_main);
 
-        ImageView head_iv= (ImageView) headview.findViewById(R.id.imageView);
+    public void initLogin() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        View headview = navigationView.inflateHeaderView(R.layout.nav_header_main);
+
+        ImageView head_iv = (ImageView) headview.findViewById(R.id.imageView);
         head_iv.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 //                Toast.makeText(getApplicationContext(), "您点击了头像",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
             }
         });
-        }
+    }
 
 
-    public void initDrawer(){
+    public void initDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -167,13 +198,24 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_tools, R.id.nav_collection, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        Menu menu = navigationView.getMenu();
+        MenuItem coll = menu.findItem(R.id.nav_collection);
+        coll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), History.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
     }
-
-
 }

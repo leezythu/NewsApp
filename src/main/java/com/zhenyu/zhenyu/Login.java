@@ -2,7 +2,6 @@ package com.zhenyu.zhenyu;
 
 
 
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +28,6 @@ import com.zhenyu.zhenyu.utils.LogController;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 
 

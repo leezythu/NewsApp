@@ -18,7 +18,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListHolder> {
     @NonNull
     @Override
     public NewsListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, null);
+        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item1, null);
         return new NewsListHolder(view);
     }
 

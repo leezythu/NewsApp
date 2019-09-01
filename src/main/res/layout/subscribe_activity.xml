@@ -112,7 +112,7 @@
                     android:scrollbars="vertical"
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="14.0px" />
-
+r
                 <TextView
                     android:id="@+id/back_btn"
                     android:layout_width="wrap_content"
