@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/title_bar_style" >
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:background="@color/mediumpurple"
+       />
+
+    <ImageView
+        android:layout_width="44dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/back"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="-7dp"
+        android:layout_marginTop="12dp"
+
+        android:src="@drawable/btn_back_pressed"/>
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/title_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/drawer_btn_rss"/>
+
+    <TextView
+        android:id="@+id/right_text"
+        style="@style/title_bar_button"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/right_progress"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15.0dip"
+        android:indeterminateOnly="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

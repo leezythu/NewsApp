@@ -1,9 +1,14 @@
 package com.zhenyu.zhenyu;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> add choose/delete tabs function
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+<<<<<<< HEAD
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +16,13 @@ import androidx.lifecycle.Observer;
 
 import com.zhenyu.zhenyu.RequestData.Reception;
 import com.zhenyu.zhenyu.utils.LogController;
+=======
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+>>>>>>> add choose/delete tabs function
 
 public class Login extends AppCompatActivity {
 

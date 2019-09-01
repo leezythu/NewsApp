@@ -132,6 +132,7 @@ public class PlaceHolderFragment extends Fragment {
                         Intent intent = new Intent(getContext(), SingleNews.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("newsid",newpageid);
+
                         intent.putExtras(bundle);
                         startActivity(intent);
 
