@@ -23,10 +23,12 @@ import android.view.Window;
 
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Reception.getReception(getApplication());
         initDrawer();
         initTabs();
+
         initViewPage();
         initLogin();
     }
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(configuration);
+
         sectionsPagerAdapter = new SectionsPagerAdapter(this, current, notuse, getSupportFragmentManager());
 
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -152,12 +156,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -190,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
     public void initDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), History.class);
                 startActivity(intent);
                 return true;
@@ -218,4 +218,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        MenuItem menuItem=menu.findItem(R.id.action_search);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+//                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), Search.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+        return true;
+
+    }
+
+
 }

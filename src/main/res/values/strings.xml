@@ -42,6 +42,7 @@
     <string name="title_activity_login">Login</string>
     <string name="title_activity_reversetab">Tab</string>
     <string name="title_activity_history">History</string>
+    <string name="title_activity_search">Search</string>
     <string name="drawer_btn_rss">栏目管理</string>
     <string name="subscribe_my_category">切换栏目</string>
     <string name="subscribe_more_category">更多栏目</string>
