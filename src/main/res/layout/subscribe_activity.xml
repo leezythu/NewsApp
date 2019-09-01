@@ -6,10 +6,12 @@
     android:background="@color/subscribe_activity_bg">
 
     <include
+
         android:id="@+id/title_bar"
         layout="@layout/title_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -111,6 +113,7 @@
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="14.0px" />
 
+
                 <TextView
                     android:id="@+id/back_btn"
                     android:layout_width="wrap_content"
@@ -120,6 +123,7 @@
                     android:background="@mipmap/log_in"
                     android:gravity="center"
                     android:text="返回" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

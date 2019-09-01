@@ -72,6 +72,7 @@ public class ReverseTab extends Activity implements OnItemClickListener{
     private void initData() {
         mymap.put(0,"首页");
         mymap.put(1,"推荐");
+
         mymap.put(2,"科技");
         mymap.put(3,"娱乐");
         mymap.put(4,"军事");
@@ -82,6 +83,7 @@ public class ReverseTab extends Activity implements OnItemClickListener{
         mymap.put(9,"社会");
         mymap.put(10,"汽车");
         mymap.put(11,"文化");
+
 
 
         for(Integer i:current){
@@ -164,6 +166,7 @@ public class ReverseTab extends Activity implements OnItemClickListener{
                 Toast.makeText(getApplicationContext(), "您点击了!!"+userAdapter.channelList,Toast.LENGTH_LONG).show();
             }
         });
+
        TextView iv=(TextView)findViewById(R.id.back_btn);
         iv.bringToFront();
         iv.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +192,7 @@ public class ReverseTab extends Activity implements OnItemClickListener{
                 finish();
             }
         });
+
 
     }
 

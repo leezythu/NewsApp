@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.zhenyu.zhenyu.SingleNews">
     <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/action_search"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+        android:icon="@drawable/round_more_horiz_24"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
+
 </menu>

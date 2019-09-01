@@ -17,6 +17,8 @@ import com.zhenyu.zhenyu.user.UserProfile;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -47,13 +49,29 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_single_news);
 
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitle("NewsApp");
-//        toolbar.bringToFront();
-////        toolbar.setSubtitle("这里是子标题");
-//        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
-////        toolbar.setLogo(R.drawable.ic_launcher_background);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("NewsApp");
+        toolbar.bringToFront();
+//        toolbar.setSubtitle("这里是子标题");
+        toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
+//        toolbar.setLogo(R.drawable.round_more_horiz_24  );
+        setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_single_news);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_settings:
+                        bottomSheetBehavior.show();
+                        break;
+                    case R.id.action_search:
+                        Toast.makeText(getApplicationContext(), "searching~", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+
+        });
 
 
         Intent intent = getIntent();
@@ -95,10 +113,17 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         userProfile.addkeys(entity.getCategories(), entity.getKeyscore());
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_single_news, menu);
+        return true;
+    }
+
     public void initbottonsheet(){
 
-        moreview = findViewById(R.id.moreaction);
-        moreview.setOnClickListener(this);
+//        moreview = findViewById(R.id.moreaction);
+//        moreview.setOnClickListener(this);
 
         bottomsheetlayout = (LinearLayout) findViewById(R.id.bottomsheet);
         bottomSheetBehavior = new BottomSheetDialog(this);
@@ -128,12 +153,13 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
             case R.id.blocking_item:
                 Toast.makeText(getApplicationContext(), "click blocking", Toast.LENGTH_LONG).show();
                 break;
-            case R.id.moreaction:
-                bottomSheetBehavior.show();
+//            case R.id.moreaction:
+//                bottomSheetBehavior.show();
             default:
                     break;
         }
 
     }
+
 
 }
