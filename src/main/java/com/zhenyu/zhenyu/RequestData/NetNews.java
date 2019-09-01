@@ -26,10 +26,20 @@ public class NetNews {
         private String category;
         private ArrayList<KeyWords> keywords;
         private String newsID;
+        private ArrayList<Orgs> organizations;
 
-        public class KeyWords{
+        class KeyWords{
             private double score;
             private String word;
+        }
+        public class Orgs{
+            private String mention;
+            private String linkedURL;
+
+            Orgs(String m,String l){
+                mention = m;
+                linkedURL = l;
+            }
         }
     }
 
@@ -58,8 +68,17 @@ public class NetNews {
             temps.append(" ");
         }
         String stringkeywords = temps.toString();
-//        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keys);
-        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),flag);
+
+        String publisher = "Unknown";
+        String puburl = "http://www.xinhuanet.com/whxw.htm";
+        try {
+            NewsData.Orgs pubOrg = temp.organizations.get(0);
+            publisher = pubOrg.mention;
+            puburl = pubOrg.linkedURL;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),publisher, puburl,flag);
     }
 
     public List<NewsEntity> toNewsList(int flag){

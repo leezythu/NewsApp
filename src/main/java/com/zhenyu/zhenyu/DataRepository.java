@@ -61,7 +61,7 @@ public class DataRepository {
         if(w != null){
             return w;
         }
-        else return new NewsEntity("not","", "", "not find", "this is just a test", "test",null, null, 0,0);
+        else return new NewsEntity("not","", "", "not find", "this is just a test", "test",null,null,0,null, null, 0);
     }
 
     public void addNewsToNewsbase(List<NewsEntity> NewNews){

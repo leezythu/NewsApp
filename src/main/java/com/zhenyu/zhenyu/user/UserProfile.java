@@ -19,10 +19,10 @@ public class UserProfile {
         preferrence = new HashMap<>();
         catePreference = new HashMap<>();
         //“首页" 可表示 “首页”中的新闻，以及 所有种类的新闻的和
-        String[] catesall = {"首页","科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车"};
+        String[] catesall = {"首页","推荐","科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车","文化"};
         for(String va : catesall)
             preferrence.put(va, new sField(va));
-        String[] cates = {"科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车"};
+        String[] cates = {"科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车","文化"};
         for(String va : cates)
             catePreference.put(va, 0.);
         blockingWords = new HashSet<>();

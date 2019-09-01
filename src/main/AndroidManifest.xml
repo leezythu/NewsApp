@@ -13,9 +13,11 @@
         android:theme="@style/AppTheme">
         <activity
         android:name=".SingleNews"
+        android:parentActivityName=".MainActivity"
         android:label="@string/title_activity_single_news"
         android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
+            android:parentActivityName=".MainActivity"
             android:name=".Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar"></activity>

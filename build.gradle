@@ -25,7 +25,7 @@ android {
 dependencies {
 
 
-
+    implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

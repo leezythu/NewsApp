@@ -1,19 +1,16 @@
 package com.zhenyu.zhenyu.RequestData;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
-import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.user.UserProfile;
+import com.zhenyu.zhenyu.utils.LogController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -126,7 +123,6 @@ public class Reception {
                     return;
                 }
                 else {
-
                     appDatabase.getNewsEntityDao().addNewsAll(response.body().toNewsList(2));
                 }
             }
@@ -147,20 +143,25 @@ public class Reception {
         Map<String, String> usrinfo = new HashMap<>();
         usrinfo.put("username", username);
         usrinfo.put("password", passwd);
-        Call<String> usr = service.login(usrinfo);
 
-        usr.enqueue(new Callback<String>() {
+        Call<LoginEntity> usr = service.login(usrinfo);
+
+        final LogController logController = LogController.getInstance(null);
+        usr.enqueue(new Callback<LoginEntity>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
+            public void onResponse(Call<LoginEntity> call, Response<LoginEntity> response) {
+                logController.mlogin(response.body().getInfo());
+                if(response.body().getIcode() == 200)
+                    logController.mloginSuccessfully();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
+            public void onFailure(Call<LoginEntity> call, Throwable t) {
+                System.out.println(t.getMessage());
             }
         });
     }
+
 
     public static void usrRegister(@NonNull String username, @NonNull String passwd){
         Retrofit retrofit = new Retrofit.Builder()
@@ -172,17 +173,22 @@ public class Reception {
         Map<String, String> usrinfo = new HashMap<>();
         usrinfo.put("username", username);
         usrinfo.put("password", passwd);
-        Call<String> usr = service.login(usrinfo);
 
-        usr.enqueue(new Callback<String>() {
+        Call<LoginEntity> usr = service.login(usrinfo);
+
+        final LogController logController = LogController.getInstance(null);
+        usr.enqueue(new Callback<LoginEntity>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
+            public void onResponse(Call<LoginEntity> call, Response<LoginEntity> response) {
+                logController.mlogin(response.body().getInfo());
+                if (response.body().getIcode() == 200)
+                    logController.mloginSuccessfully();
+                //destroy activity
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
+            public void onFailure(Call<LoginEntity> call, Throwable t) {
+                System.out.println(t.getMessage());
             }
         });
     }
@@ -196,20 +202,48 @@ public class Reception {
         Map<String, String> usrinfo = new HashMap<>();
         usrinfo.put("usrname", usrname);
 
-        Call<String> usr = service.log_out(usrinfo);
-        usr.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
 
+        final LogController logController = LogController.getInstance(null);
+        Call<LoginEntity> usr = service.log_out(usrinfo);
+        usr.enqueue(new Callback<LoginEntity>() {
+            @Override
+            public void onResponse(Call<LoginEntity> call, Response<LoginEntity> response) {
+                if(response.body().getIcode() == 200)
+                    logController.mlogout();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
+            public void onFailure(Call<LoginEntity> call, Throwable t) {
+                System.out.println(t.getMessage());
             }
         });
     }
 
+    public static void uploadItem(@NonNull String usrname, @NonNull String item) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("127.0.0.1:8000/news")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GetRequest_Interfece service = retrofit.create(GetRequest_Interfece.class);
+        Map<String, String> usrinfo = new HashMap<>();
+        usrinfo.put("usrname", usrname);
+        usrinfo.put("data", item);
+
+        final LogController logController = LogController.getInstance(null);
+        Call<LoginEntity> usr = service.uploadNew(usrinfo);
+        usr.enqueue(new Callback<LoginEntity>() {
+            @Override
+            public void onResponse(Call<LoginEntity> call, Response<LoginEntity> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginEntity> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+    }
 
 
 }

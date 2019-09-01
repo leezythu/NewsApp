@@ -1,6 +1,7 @@
 package com.zhenyu.zhenyu.NewsPages;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -19,13 +20,29 @@ import java.util.ArrayList;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_shouye, R.string.tab_text_tuijian, R.string.tab_text_keji, R.string.tab_text_yule, R.string.tab_text_junshi,R.string.tab_text_tiyu,R.string.tab_text_caijing,R.string.tab_text_jiankang,R.string.tab_text_jiaoyu,R.string.tab_text_shehui, R.string.tab_text_qiche};
-    private static final String[] TAB_CONTENT = new String[]{"首页","推荐","科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车"};
+
+
+    @StringRes
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_shouye, R.string.tab_text_tuijian, R.string.tab_text_keji, R.string.tab_text_yule, R.string.tab_text_junshi,R.string.tab_text_tiyu,R.string.tab_text_caijing,R.string.tab_text_jiankang,R.string.tab_text_jiaoyu,R.string.tab_text_shehui, R.string.tab_text_qiche,R.string.tab_text_wenhua};
+    private static final String[] TAB_CONTENT = new String[]{"首页","推荐","科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车","文化"};
+
     private final Context mContext;
     private ArrayList<Integer>cur;
     private ArrayList<Integer>notuse;
     private int count;
-    public SectionsPagerAdapter(Context context, ArrayList<Integer>cur,ArrayList<Integer>notuse, FragmentManager fm) {
+    public void set_cur( ArrayList<Integer> current){
+        cur=current;
+    }
+    public void set_notuse( ArrayList<Integer> notuse){
+        this.notuse=notuse;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+    public SectionsPagerAdapter(Context context, ArrayList<Integer>cur, ArrayList<Integer>notuse, FragmentManager fm) {
         super(fm);
         count=cur.size();
         this.cur=cur;
@@ -49,7 +66,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
 
     public int getCount() {
+
         // Show  pages.
         return count;
+
     }
 }

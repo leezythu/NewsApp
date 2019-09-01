@@ -45,8 +45,14 @@ public class BrowsedNews {
     @ColumnInfo(name = "entryTime")
     private long entryTime = 111111;
 
-    public BrowsedNews(String newsid,String image, String publishTime, String title,
-                      String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime, int flag){
+
+    @ColumnInfo(name = "publisher")
+    private String publisher = "";
+
+    @ColumnInfo String puburl = "";
+
+    public BrowsedNews(String newsid, String image, String publishTime, String title,
+                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String puburl, int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -57,6 +63,8 @@ public class BrowsedNews {
         this.flag = flag;
         this.stringkeywords = stringkeywords;
         this.entryTime = entryTime;
+        this.publisher = publisher;
+        this.puburl = puburl;
     }
 
     public BrowsedNews(){
@@ -65,8 +73,12 @@ public class BrowsedNews {
         this.categories = ""; this.keyscore = new HashMap<>(); this.flag = 0;
         this.image = "";
         this.entryTime = 111;
+        publisher = "";
+        puburl = "";
     }
 
+    public void setPublisher(String publisher){this.publisher = publisher;}
+    public void setPuburl(String puburl) {this.puburl = puburl;}
     public void setNewsid(String newsid){ this.newsid = newsid;}
     public void setImage(String image){ this.image = image; }
     public void setPublishTime(String publishTime) { this.publishTime = publishTime; }
@@ -90,4 +102,6 @@ public class BrowsedNews {
     public int getFlag(){ return flag; }
     public String getStringkeywords() {return this.stringkeywords;}
     public long getEntryTime() {return entryTime; }
+    public String getPublisher(){return  this.publisher;}
+    public String getPuburl(){return this.puburl;}
 }

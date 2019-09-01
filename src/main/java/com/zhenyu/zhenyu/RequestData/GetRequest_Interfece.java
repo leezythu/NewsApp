@@ -1,6 +1,8 @@
 package com.zhenyu.zhenyu.RequestData;
 
 import com.zhenyu.zhenyu.Database.NewsEntity;
+import com.zhenyu.zhenyu.Login;
+
 
 import java.util.Map;
 
@@ -15,17 +17,19 @@ public interface GetRequest_Interfece {
     //
 
     @POST("login")
-    Call<String> login(@QueryMap Map<String, String> param);
+    Call<LoginEntity> login(@QueryMap Map<String, String> param);
 
     @POST("register")
-    Call<String> register(@QueryMap Map<String, String> param);
+    Call<LoginEntity> register(@QueryMap Map<String, String> param);
 
     @POST("logout")
-    Call<String> log_out(@QueryMap Map<String, String> param);
+    Call<LoginEntity> log_out(@QueryMap Map<String, String> param);
 
     @GET("favorate")
     Call<NewsEntity> pullFavorate();
 
     @POST("add")
-    Call<String> uploadNew(@QueryMap Map<String, String> param);
+
+    Call<LoginEntity> uploadNew(@QueryMap Map<String, String> param);
+
 }
