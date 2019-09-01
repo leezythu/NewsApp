@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +50,9 @@ public class BrowsedNews {
     @ColumnInfo(name = "publisher")
     private String publisher = "";
 
-    @ColumnInfo String puburl = "";
 
     public BrowsedNews(String newsid, String image, String publishTime, String title,
-                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String puburl, int flag){
+                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -64,7 +64,6 @@ public class BrowsedNews {
         this.stringkeywords = stringkeywords;
         this.entryTime = entryTime;
         this.publisher = publisher;
-        this.puburl = puburl;
     }
 
     public BrowsedNews(){
@@ -74,11 +73,22 @@ public class BrowsedNews {
         this.image = "";
         this.entryTime = 111;
         publisher = "";
-        puburl = "";
+    }
+
+    public BrowsedNews(NewsEntity newsEntity){
+        this.newsid = newsEntity.getNewsid();
+        this.stringkeywords = newsEntity.getStringkeywords();
+        this.title = newsEntity.getTitle();
+        this.content = newsEntity.getContent();
+        this.publishTime = newsEntity.getPublishTime();
+        this.publisher = newsEntity.getPublisher();
+        this.categories = newsEntity.getCategories();
+        this.keyscore = newsEntity.getKeyscore();
+        this.flag = newsEntity.getFlag();
+        this.entryTime = new Date().getTime();
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}
-    public void setPuburl(String puburl) {this.puburl = puburl;}
     public void setNewsid(String newsid){ this.newsid = newsid;}
     public void setImage(String image){ this.image = image; }
     public void setPublishTime(String publishTime) { this.publishTime = publishTime; }
@@ -103,5 +113,4 @@ public class BrowsedNews {
     public String getStringkeywords() {return this.stringkeywords;}
     public long getEntryTime() {return entryTime; }
     public String getPublisher(){return  this.publisher;}
-    public String getPuburl(){return this.puburl;}
 }

@@ -27,6 +27,7 @@ public class NetNews {
         private ArrayList<KeyWords> keywords;
         private String newsID;
         private ArrayList<Orgs> organizations;
+        private String publisher;
 
         class KeyWords{
             private double score;
@@ -69,16 +70,16 @@ public class NetNews {
         }
         String stringkeywords = temps.toString();
 
-        String publisher = "Unknown";
-        String puburl = "http://www.xinhuanet.com/whxw.htm";
-        try {
-            NewsData.Orgs pubOrg = temp.organizations.get(0);
-            publisher = pubOrg.mention;
-            puburl = pubOrg.linkedURL;
-        }catch (Exception e){
-            e.getMessage();
+
+        if(temp.publisher.equals("其他")) {
+            try {
+                NewsData.Orgs pubOrg = temp.organizations.get(0);
+                temp.publisher = pubOrg.mention;
+            } catch (Exception e) {
+                e.getMessage();
+            }
         }
-        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),publisher, puburl,flag);
+        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, flag);
     }
 
     public List<NewsEntity> toNewsList(int flag){

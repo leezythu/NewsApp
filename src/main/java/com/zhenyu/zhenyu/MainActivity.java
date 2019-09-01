@@ -7,12 +7,20 @@ import android.content.ClipData;
 import android.content.Context;
 
 
+
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.view.Window;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -40,6 +48,11 @@ import com.zhenyu.zhenyu.RequestData.Reception;
 
 
 
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
+
+
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
@@ -53,8 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter sectionsPagerAdapter;
 
 
+
     private ArrayList<Integer> current = new ArrayList<Integer>();
     private ArrayList<Integer> notuse = new ArrayList<Integer>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         initLogin();
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -80,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         current = bundle.getIntegerArrayList("current_tabs");
         notuse = bundle.getIntegerArrayList("notuse_tabs");
         Toast.makeText(getApplicationContext(), current.toString(), Toast.LENGTH_LONG).show();
+
         sectionsPagerAdapter.set_cur(current);
         sectionsPagerAdapter.set_notuse(notuse);
         sectionsPagerAdapter.notifyDataSetChanged();
@@ -87,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     public void initTabs() {
+
         current.add(0);
         current.add(1);
         current.add(2);
@@ -102,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         notuse.add(10);
         notuse.add(11);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.tab_fab);
+
         fab.bringToFront();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,17 +135,21 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putIntegerArrayList("notuse_tabs", notuse);
                 intent.putExtras(bundle);
 
+
                 startActivityForResult(intent, 0);
+
 
             }
         });
     }
 
     public void initViewPage() {
+
         ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(configuration);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(this, current, notuse, getSupportFragmentManager());
+
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);

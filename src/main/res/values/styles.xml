@@ -95,7 +95,6 @@
     </style>
 
 
-
     <style name="common_button" parent="@style/text_on_button">
         <item name="android:background">@drawable/btn_common</item>
         <item name="android:paddingLeft">6.0dip</item>
@@ -133,5 +132,6 @@
     </style>
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
 
 </resources>

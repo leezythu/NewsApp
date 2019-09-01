@@ -111,6 +111,8 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         // handle user preference
         UserProfile userProfile = UserProfile.getInstance();
         userProfile.addkeys(entity.getCategories(), entity.getKeyscore());
+        entity.setFlag(0);
+        dataRepository.addNewsToBrowsedNews(entity);
     }
 
 
@@ -145,10 +147,15 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.share_item:
+                Intent shareintent = new Intent(Intent.ACTION_SEND);
+//                shareintent.setPackage()
                 Toast.makeText(getApplicationContext(), "click share", Toast.LENGTH_LONG).show();
                 break;
             case R.id.favorate_item:
-                Toast.makeText(getApplicationContext(), "click favorate", Toast.LENGTH_LONG).show();
+                NewsEntity entity = dataRepository.loadNewsById(newsid);
+                entity.setFlag(1);
+                dataRepository.addNewsToBrowsedNews(entity);
+                Toast.makeText(getApplicationContext(), "added to favorate news", Toast.LENGTH_LONG).show();
                 break;
             case R.id.blocking_item:
                 Toast.makeText(getApplicationContext(), "click blocking", Toast.LENGTH_LONG).show();

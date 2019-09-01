@@ -51,7 +51,6 @@ public class NewsEntity {
     @ColumnInfo(name = "publisher")
     private String publisher = "";
 
-    @ColumnInfo String puburl = "";
 
     public NewsEntity(){
         this.newsid = "1"; this.stringkeywords = "";
@@ -60,11 +59,10 @@ public class NewsEntity {
         this.image = "";
         entryTime = 1111111;
         publisher = "";
-        puburl = "";
     }
 
     public NewsEntity(String newsid, String image, String publishTime, String title,
-                      String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String puburl, int flag){
+                      String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -76,11 +74,9 @@ public class NewsEntity {
         this.stringkeywords = stringkeywords;
         this.entryTime = entryTime;
         this.publisher = publisher;
-        this.puburl = puburl;
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}
-    public void setPuburl(String puburl) {this.puburl = puburl;}
     public void setNewsid(String newsid){ this.newsid = newsid;}
     public void setImage(String image){ this.image = image; }
     public void setPublishTime(String publishTime) { this.publishTime = publishTime; }
@@ -93,7 +89,6 @@ public class NewsEntity {
     public void setEntryTime(long entryTime){ this.entryTime = entryTime; }
 
     public String getPublisher(){return  this.publisher;}
-    public String getPuburl(){return this.puburl;}
     public String getNewsid(){return this.newsid;}
     public String getImage(){return this.image;}
     public String getPublishTime(){return this.publishTime;}
