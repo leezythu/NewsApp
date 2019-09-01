@@ -72,14 +72,19 @@ public class ReverseTab extends Activity implements OnItemClickListener{
     private void initData() {
         mymap.put(0,"首页");
         mymap.put(1,"推荐");
-        mymap.put(2,"娱乐");
-        mymap.put(3,"军事");
-        mymap.put(4,"体育");
-        mymap.put(5,"财经");
-        mymap.put(6,"健康");
-        mymap.put(7,"教育");
-        mymap.put(8,"社会");
-        mymap.put(9,"汽车");
+
+        mymap.put(2,"科技");
+        mymap.put(3,"娱乐");
+        mymap.put(4,"军事");
+        mymap.put(5,"体育");
+        mymap.put(6,"财经");
+        mymap.put(7,"健康");
+        mymap.put(8,"教育");
+        mymap.put(9,"社会");
+        mymap.put(10,"汽车");
+        mymap.put(11,"文化");
+
+
 
         for(Integer i:current){
             ChannelItem tmp=new ChannelItem(i,mymap.get(i),0 ,1 ,0);
@@ -140,6 +145,7 @@ public class ReverseTab extends Activity implements OnItemClickListener{
 
     /** 初始化布局*/
     private void initView() {
+
         userGridView = (DragGrid) findViewById(R.id.userGridView);
         otherGridView = (OtherGridView) findViewById(R.id.otherGridView);
         tv_save = (TextView) findViewById(R.id.tv_save);
@@ -160,6 +166,33 @@ public class ReverseTab extends Activity implements OnItemClickListener{
                 Toast.makeText(getApplicationContext(), "您点击了!!"+userAdapter.channelList,Toast.LENGTH_LONG).show();
             }
         });
+
+       TextView iv=(TextView)findViewById(R.id.back_btn);
+        iv.bringToFront();
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "您点击了!!",Toast.LENGTH_LONG).show();
+//                System.out.println(userAdapter.channelList);
+//                Toast.makeText(getApplicationContext(), "返回??",Toast.LENGTH_LONG).show();
+                Intent intent =new Intent();
+                Bundle bundle=new Bundle();
+                ArrayList<Integer>current_tmp=new  ArrayList<Integer>() ;
+                ArrayList<Integer>notuse_tmp= new ArrayList<Integer>();
+                for(ChannelItem item:userAdapter.channelList){
+                    current_tmp.add(item.id);
+                }
+                for(ChannelItem item:otherAdapter.channelList){
+                    notuse_tmp.add(item.id);
+                }current=current_tmp;
+                notuse=notuse_tmp;
+                bundle.putIntegerArrayList("current_tabs",current);
+                bundle.putIntegerArrayList("notuse_tabs",notuse);
+                intent.putExtras(bundle);
+                setResult(0,intent);
+                finish();
+            }
+        });
+
     }
 
     @Override

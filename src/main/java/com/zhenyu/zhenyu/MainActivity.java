@@ -1,16 +1,24 @@
 package com.zhenyu.zhenyu;
 
-<<<<<<< HEAD
-=======
+
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
->>>>>>> add choose/delete tabs function
+
+
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +29,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.zhenyu.zhenyu.Database.AppDatabase;
@@ -28,31 +37,18 @@ import com.zhenyu.zhenyu.Database.AppExecutors;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
 
-<<<<<<< HEAD
-=======
+
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.viewpager.widget.ViewPager;
 
-import android.view.Menu;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
->>>>>>> add choose/delete tabs function
+
+
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     private ArrayList<Integer>current=new ArrayList<Integer>();
     private ArrayList<Integer>notuse=new ArrayList<Integer>();
@@ -70,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
         initViewPage();
         initLogin();
     }
+
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bundle bundle = data.getExtras();
+        current=bundle.getIntegerArrayList("current_tabs");
+        notuse=bundle.getIntegerArrayList("notuse_tabs");
+        Toast.makeText(getApplicationContext(), current.toString(),Toast.LENGTH_LONG).show();
+        sectionsPagerAdapter.set_cur(current);
+        sectionsPagerAdapter.set_notuse(notuse);
+        sectionsPagerAdapter.notifyDataSetChanged();
+        initViewPage();
+    }
+
+
     public void initTabs(){
         current.add(0);
         current.add(1);
@@ -81,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
         notuse.add(7);
         notuse.add(8);
         notuse.add(9);
+
+        notuse.add(10);
+        notuse.add(11);
+
         FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.tab_fab);
         fab.bringToFront();
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,13 +106,17 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putIntegerArrayList("current_tabs",current);
                 bundle.putIntegerArrayList("notuse_tabs",notuse);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, Activity.RESULT_OK);
+
+                startActivityForResult(intent,0);
+
             }
         });
     }
 
     public void initViewPage() {
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, current,notuse,getSupportFragmentManager());
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, current,notuse,getSupportFragmentManager());
+
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
