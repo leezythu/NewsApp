@@ -27,8 +27,8 @@ public interface NewsEntityDao {
     @Query("select * from AugustNews where flag = 0 order by entryTime desc")
     LiveData<List<NewsEntity>> getHomePageNews();
 
-    @Delete()
-    void deleteNews(NewsEntity newsEntity);
+    @Query("delete from AugustNews where newsid = :goneid")
+    void deletenews(String goneid);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addNewsAll(List<NewsEntity> news);

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.zhenyu.zhenyu.Database.AppDatabase;
+import com.zhenyu.zhenyu.Database.BrowsedNews;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 
 import java.util.List;
@@ -50,25 +51,19 @@ public class DataRepository {
         return sInstance;
     }
 
-    public LiveData<List<NewsEntity>> getHomePageNews() {
-        return mObservableNews;
-    }
-
-    public LiveData<List<NewsEntity>> getCategoricalNews(String category){ return appDatabase.getNewsEntityDao().getCategoricalNews(category);}
-
     public NewsEntity loadNewsById(final String newsID){
         NewsEntity w = appDatabase.getNewsEntityDao().getNewsByIdSync(newsID);
         if(w != null){
             return w;
         }
-        else return new NewsEntity("not","", "", "not find", "this is just a test", "test",null,null,0,null, null, 0);
+        else return new NewsEntity("not","", "", "not find", "this is just a test", "test",null,null,0,null, 0);
     }
 
     public void addNewsToNewsbase(List<NewsEntity> NewNews){
         appDatabase.getNewsEntityDao().addNewsAll(NewNews);
     }
     public void addNewsToBrowsedNews(NewsEntity newsEntity){
-        appDatabase.getBrowsedNewsDao().addBrowesedNews(newsEntity);
+        appDatabase.getBrowsedNewsDao().addBrowesedNews(new BrowsedNews(newsEntity));
     }
 
     public int getDatabaseSize() {
@@ -80,5 +75,12 @@ public class DataRepository {
     }
 
     public LiveData<List<NewsEntity>> getRecommendedNews(){ return mRecommendedNews;}
+    public LiveData<List<NewsEntity>> getHomePageNews() {
+        return mObservableNews;
+    }
+    public LiveData<List<NewsEntity>> getCategoricalNews(String category){ return appDatabase.getNewsEntityDao().getCategoricalNews(category);}
+
+    public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getHistoryNews(); }
+    public LiveData<List<BrowsedNews>> getLikedNews(){ return appDatabase.getBrowsedNewsDao().getLikedNews(); }
 }
 
