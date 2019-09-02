@@ -18,7 +18,7 @@ public class PageViewModel extends AndroidViewModel {
     private MediatorLiveData<List<NewsEntity>> mObservableNews;
     private DataRepository repository;
     private int mflag;
-
+    
     public PageViewModel(Application application){
         super(application);
         mObservableNews = new MediatorLiveData<>();

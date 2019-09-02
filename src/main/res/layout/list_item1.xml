@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/appbg"
+        android:background="@color/white"
         >
 
         <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="85dp"
             android:orientation="horizontal"
-            android:background="?attr/appbg">
+            android:background="@color/white">
 
             <ImageView
                 android:id="@+id/new_image"

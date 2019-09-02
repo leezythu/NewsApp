@@ -13,7 +13,7 @@
         android:id="@+id/refreshlays"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/appbg"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/newslist"
-            android:background="?attr/appbg"
+            android:background="@color/white"
             />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
