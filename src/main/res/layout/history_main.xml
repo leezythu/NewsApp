@@ -26,21 +26,21 @@
             android:text="收藏/历史"
             android:textColorHighlight="@color/white"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button1"
-                android:text="likes"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button2"
-                android:text="history"/>
-        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:id="@+id/button1"-->
+<!--                android:text="likes"/>-->
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:id="@+id/button2"-->
+<!--                android:text="history"/>-->
+<!--        </LinearLayout>-->
     </RelativeLayout>
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                     android:backgroundTint="?attr/tab"
                     app:tabTextAppearance="@style/MyTabLayoutTextAppearanceInverse"
                     android:background="@color/mediumpurple"
-                    app:tabMinWidth="90dp"
+                    app:tabMinWidth="180dp"
                     app:tabGravity="fill"
                     app:tabMode="fixed"/>
             </HorizontalScrollView>
