@@ -35,33 +35,33 @@ public class History extends AppCompatActivity {
 
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
 
-        Button btn1 = findViewById(R.id.button1);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int ss = 0;
-                try{
-                    ss=dataRepository.getLikedNews().getValue().size();
-                }catch (Exception e){
-                    ss = -1;
-                }
-                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Button btn2 = findViewById(R.id.button2);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int ss = 0;
-                try{
-                    ss=dataRepository.getHistoricalNews().getValue().size();
-                }catch (Exception e){
-                    ss = -1;
-                }
-                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Button btn1 = findViewById(R.id.button1);
+//        btn1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int ss = 0;
+//                try{
+//                    ss=dataRepository.getLikedNews().getValue().size();
+//                }catch (Exception e){
+//                    ss = -1;
+//                }
+//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        Button btn2 = findViewById(R.id.button2);
+//        btn2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int ss = 0;
+//                try{
+//                    ss=dataRepository.getHistoricalNews().getValue().size();
+//                }catch (Exception e){
+//                    ss = -1;
+//                }
+//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
     public void initViewPage() {
@@ -73,6 +73,8 @@ public class History extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.h_view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.h_tabs);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabs.setTabMode(TabLayout.MODE_FIXED);
         tabs.setupWithViewPager(viewPager);
     }
 }
