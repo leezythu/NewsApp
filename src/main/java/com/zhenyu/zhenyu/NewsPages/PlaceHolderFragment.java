@@ -87,8 +87,11 @@ public class PlaceHolderFragment extends Fragment {
                 String startdate = dateControl.backday();
                 if(CategoryS.equals("首页"))
                     Reception.request(null, null, startdate, enddate, 0);
-                else if(CategoryS.equals("推荐"))
-                    Reception.requestRecommended(null, null, startdate, enddate);
+                else if(CategoryS.equals("推荐")) {
+                        Reception.requestRecommended(null, null, startdate, enddate);
+                        Reception.requestRecommended(null, null, startdate, enddate);
+                        Reception.requestRecommended(null, null, startdate, enddate);
+                }
                 else
                     Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
                 refreshlayout.finishRefresh(1000/*,false*/);//传入false表示刷新失败
@@ -101,8 +104,9 @@ public class PlaceHolderFragment extends Fragment {
                 String startdate = dateControl.backday();
                 if(CategoryS.equals("首页"))
                     Reception.request(null, null, startdate, enddate, 0);
-                else if(CategoryS.equals("推荐"))
+                else if(CategoryS.equals("推荐")) {
                     Reception.requestRecommended(null, null, startdate, enddate);
+                }
                 else
                     Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
                 refreshlayout.finishLoadMore(1000/*,false*/);//传入false表示加载失败

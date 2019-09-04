@@ -27,6 +27,7 @@ import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.user.UserProfile;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -116,7 +117,12 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         UserProfile userProfile = UserProfile.getInstance();
         userProfile.addkeys(entity.getCategories(), entity.getKeyscore());
         entity.setFlag(0);
+        entity.setEntryTime(new Date().getTime());
         dataRepository.addNewsToBrowsedNews(entity);
+
+
+        Toast.makeText(getApplicationContext(), userProfile.seeCategory(), Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -143,6 +149,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         favoratelayout.setOnClickListener(this);
         blockinglayout.setOnClickListener(this);
 
+
 //        bottomSheetBehavior = BottomSheetBehavior.from(bottomsheetlayout);
 //        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
@@ -167,8 +174,11 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.favorate_item:
                 entity.setFlag(1);
+                entity.setEntryTime(new Date().getTime());
                 dataRepository.addNewsToBrowsedNews(entity);
-                Toast.makeText(getApplicationContext(), "added to favorate news", Toast.LENGTH_LONG).show();
+                UserProfile userProfile = UserProfile.getInstance();
+                userProfile.addFavorate(entity.getCategories(), entity.getKeyscore());
+                Toast.makeText(getApplicationContext(), "added to favorates", Toast.LENGTH_LONG).show();
                 break;
             case R.id.blocking_item:
                 Toast.makeText(getApplicationContext(), "click blocking", Toast.LENGTH_LONG).show();

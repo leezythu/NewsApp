@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
+import com.zhenyu.zhenyu.NewsPages.Searchpage;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 
 public class Search extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class Search extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"搜索内容为：", Toast.LENGTH_LONG).show();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                PlaceHolderFragment fragment=PlaceHolderFragment.newInstance( 1,"军事");
+                PlaceHolderFragment fragment = Searchpage.newInstance(0, "天");
                 /* SearchFragment fragment=new SearchFragment(); */
                 transaction.add(R.id.search_res_fragment, (Fragment) fragment,"dynamicFragment");
                 transaction.commit();

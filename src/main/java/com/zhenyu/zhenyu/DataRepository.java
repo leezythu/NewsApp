@@ -85,6 +85,11 @@ public class DataRepository {
     }
 
     public LiveData<List<NewsEntity>> getRecommendedNews(){ return mRecommendedNews;}
+    public int getRecoSize(){
+        try{
+            return mRecommendedNews.getValue().size();
+        } catch(Exception e){ return 0;}
+    }
     public LiveData<List<NewsEntity>> getHomePageNews() {
         return mObservableNews;
     }
@@ -93,7 +98,7 @@ public class DataRepository {
     public LiveData<List<NewsEntity>> getnewsLiked(){return appDatabase.getNewsEntityDao().getliked();}
     public void addnewsHis(NewsEntity newsEntity){ appDatabase.getNewsEntityDao().addViewed(newsEntity);}
 
-    public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getall(); }
+    public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getHistoryNews(); }
     public LiveData<List<BrowsedNews>> getLikedNews(){ return appDatabase.getBrowsedNewsDao().getLikedNews(); }
 
     public LiveData<List<NewsEntity>> getSearchResult(String keyword){ return appDatabase.getNewsEntityDao().searchNewsByOneKeyword(keyword);}

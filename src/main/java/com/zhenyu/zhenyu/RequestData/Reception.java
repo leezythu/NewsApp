@@ -87,7 +87,7 @@ public class Reception {
         UserProfile userProfile = UserProfile.getInstance();
 
         Map<String, String> Params = new HashMap<String, String>();
-        Params.put("size","10");
+        Params.put("size","3");
         String resCategory;
 
         if(categories != null) {
@@ -103,9 +103,12 @@ public class Reception {
         if(word != null)
             Params.put("words",word);
         else {
-            word = userProfile.getCategoricalKeyWords(resCategory);
-            if(word != null)
-                Params.put("words", word);
+            double w = Math.random();
+            if(w > 0.5) {
+                word = userProfile.getCategoricalKeyWords(resCategory);
+                if (word != null)
+                    Params.put("words", word);
+            }
         }
 
         if(startDate != null)
