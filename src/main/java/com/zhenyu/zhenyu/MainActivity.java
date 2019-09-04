@@ -2,6 +2,8 @@ package com.zhenyu.zhenyu;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +34,7 @@ import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
 
 import java.util.ArrayList;
-
+import java.util.ResourceBundle;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        this.setTheme(R.style.Default);
+        setTheme(R.style.Default);
         setContentView(R.layout.activity_main);
         AppDatabase.getDatabase(getApplicationContext(), new AppExecutors());
         DataRepository.getInstance(AppDatabase.getDatabase(getApplicationContext(), null));
         Reception.getReception(getApplication());
+
         initDrawer();
         initTabs();
 
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
     public void initLogin() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.bringToFront();
+
         View headview = navigationView.inflateHeaderView(R.layout.nav_header_main);
 
         ImageView head_iv = (ImageView) headview.findViewById(R.id.imageView);
@@ -169,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_collection, R.id.nav_send)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.nav_night,
+                R.id.nav_tools, R.id.nav_collection, R.id.nav_send,R.id.nav_share)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -182,9 +186,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-//                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), History.class);
                 startActivity(intent);
+                return true;
+            }
+        });
+
+        MenuItem night = menu.findItem(R.id.nav_night);
+        night.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getApplicationContext(), "您点击了夜间模式", Toast.LENGTH_LONG).show();
+                setTheme(R.style.ThemeNight);
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                TabLayout tabs = findViewById(R.id.tabs);
+                Toolbar toolbar = findViewById(R.id.toolbar);
+                toolbar.setBackgroundColor(Color.BLACK);
+                tabs.setBackgroundColor(Color.BLACK);
+                navigationView.setBackgroundColor(Color.BLACK);
+
+                initDrawer();
+                initTabs();
+                initViewPage();
+//                initLogin();
                 return true;
             }
         });

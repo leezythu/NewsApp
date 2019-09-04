@@ -10,9 +10,10 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/news_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/card_color"
         >
 
         <LinearLayout
@@ -20,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white">
+            android:background="?attr/card_color">
 
             <ImageView
                 android:id="@+id/new_image"

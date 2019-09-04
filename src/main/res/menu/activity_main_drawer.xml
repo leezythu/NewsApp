@@ -17,7 +17,7 @@
             </menu>
         </item>
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_night"
             android:icon="@mipmap/moon"
             android:title="@string/menu_night" />
         <item

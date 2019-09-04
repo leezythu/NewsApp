@@ -2,12 +2,14 @@ package com.zhenyu.zhenyu.NewsPages.ViewListNews;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,6 +24,7 @@ public class NewsListHolder extends RecyclerView.ViewHolder {
     private TextView dateView;
     private TextView categoryv;
     private ImageView imageView;
+    private CardView cardView;
     private String idx;
 
     public NewsListHolder(@NonNull View itemview){
@@ -30,6 +33,7 @@ public class NewsListHolder extends RecyclerView.ViewHolder {
         dateView = (TextView)itemview.findViewById(R.id.news_date);
         categoryv = (TextView)itemview.findViewById(R.id.news_category);
         imageView=(ImageView)itemview.findViewById(R.id.new_image);
+        cardView=(CardView)itemview.findViewById(R.id.news_card);
     }
 
     public void bindData(NewsEntity newsEntity){
@@ -40,7 +44,8 @@ public class NewsListHolder extends RecyclerView.ViewHolder {
         String imageUri = "https://hellorfimg.zcool.cn/preview260/224921422.jpg";
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         imageLoader.displayImage(imageUri, imageView);
-
+        //浏览过的新闻变为灰色
+        titleView.setTextColor(Color.GRAY);
     }
     public String getIdx(){
         return idx;
