@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -136,13 +137,14 @@ public class ShareMultiImageToWeChatUtil {
             Intent intent = new Intent();
 //            ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareImgUI");
 //            intent.setComponent(cop);
-//            intent.setAction(Intent.ACTION_SEND);
+            intent.setAction(Intent.ACTION_SEND);
             intent.setType("image/*");
-            intent.setAction("android.intent.action.SEND_MULTIPLE");
+//            intent.setAction("android.intent.action.SEND_MULTIPLE");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
 //                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri);
 
-            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
+            intent.putExtra(Intent.EXTRA_TEXT, "hahaha");
+//            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             // context.startActivity(intent);
             context.startActivity(Intent.createChooser(intent, "Share"));
@@ -151,7 +153,25 @@ public class ShareMultiImageToWeChatUtil {
         }
     }
 
-    public static void shareWechatMoment(Context context, String content, Uri uri) {
+    public static void shareWechatMoment(Context context, String content, Uri uris) {
+        if (isInstallWeChart(context)) {
+            Intent intent = new Intent();
+            //分享精确到微信的页面，朋友圈页面，或者选择好友分享页面
+            ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+            intent.setComponent(comp);
+
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, uris);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "您需要安装微信客户端", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static void shareWechatMoments(Context context, String content, ArrayList<Uri> uris) {
         if (isInstallWeChart(context)) {
             Intent intent = new Intent();
             //分享精确到微信的页面，朋友圈页面，或者选择好友分享页面
@@ -159,17 +179,46 @@ public class ShareMultiImageToWeChatUtil {
             intent.setComponent(comp);
 //            intent.setAction(Intent.ACTION_SEND_MULTIPLE);// 分享多张图片时使用
             intent.setAction(Intent.ACTION_SEND);
-            intent.setType("image/*");
-            //添加Uri图片地址--用于添加多张图片
-            //ArrayList<Uri> imageUris = new ArrayList<>();
-            //intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            if(uris != null) {
+                intent.setType("image/*");
+                //添加Uri图片地址--用于添加多张图片
+//            ArrayList<Uri> imageUris = new ArrayList<>();
+                intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+//                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+            }else{
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, content);
+            }
 
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
+
             // 微信现不能进行标题同时分享
-            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_GRANT_READ_URI_PERMISSION);
             context.startActivity(intent);
         } else {
+            Toast.makeText(context, "您需要安装微信客户端", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+    public static void shareWechatImages(Context context,String content, ArrayList<Uri> uris){
+        if (isInstallWeChart(context)){
+            Intent intent = new Intent();
+//            ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareImgUI");
+//            intent.setComponent(cop);
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            intent.setType("image/*");
+//            intent.setAction("android.intent.action.SEND_MULTIPLE");
+            intent.putExtra(Intent.EXTRA_STREAM, uris);
+//                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri);
+
+            intent.putExtra(Intent.EXTRA_TEXT, "hahaha");
+//            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            // context.startActivity(intent);
+            context.startActivity(Intent.createChooser(intent, "Share"));
+        }else{
             Toast.makeText(context, "您需要安装微信客户端", Toast.LENGTH_LONG).show();
         }
     }

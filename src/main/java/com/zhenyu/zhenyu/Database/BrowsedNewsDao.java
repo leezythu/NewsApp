@@ -33,4 +33,7 @@ public interface BrowsedNewsDao {
 
     @Query("delete from BrowsedNews where newsid = :goneid")
     void deletenews(String goneid);
+
+    @Query("delete from BrowsedNews")
+    void deleteAll();
 }

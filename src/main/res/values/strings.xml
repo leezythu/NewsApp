@@ -32,7 +32,8 @@
     <string name="tab_text_qiche">汽车</string>
     <string name="tab_text_wenhua">文化</string>
 
-    <string name="bottom_share">share</string>
+    <string name="bottom_share">share with friends</string>
+    <string name="bottom_share_moments">share to moments</string>
     <string name="bottom_favorate">favorate</string>
     <string name="bottom_blocking">block</string>
 

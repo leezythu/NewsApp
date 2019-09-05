@@ -7,7 +7,6 @@ public class pullPreference {
     private List<String> items;
 
 
-
     public int getIcode(){return icode;}
     public List<String> getItems(){return items;}
 }

@@ -3,10 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
-    defaultConfig {24
-
-
-
+    defaultConfig {
         applicationId "com.zhenyu.zhenyu"
         minSdkVersion 23
         targetSdkVersion 29

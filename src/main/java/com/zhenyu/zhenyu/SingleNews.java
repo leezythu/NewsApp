@@ -2,7 +2,6 @@ package com.zhenyu.zhenyu;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,33 +26,25 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.NewsEntity;
+import com.zhenyu.zhenyu.RequestData.Reception;
 import com.zhenyu.zhenyu.user.UserProfile;
+import com.zhenyu.zhenyu.utils.LogController;
 import com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil;
+import com.zhenyu.zhenyu.utils.shareUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.saveImageToGallery;
-import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatFriend;
+import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatImages;
 import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatMoment;
 
 public class SingleNews extends AppCompatActivity implements View.OnClickListener{
@@ -67,6 +57,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private LinearLayout sharelayout;
     private LinearLayout favoratelayout;
     private LinearLayout blockinglayout;
+    private LinearLayout sharemomentslayout;
 //    private TextView titleview;
 //    private TextView contentview;
     private ImageView imageView;
@@ -110,7 +101,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
 
         if(!imgins) {
-            initImageLoader();
+            shareUtils.initImageLoader(getApplicationContext());
             imgins = true;
         }
         initpage();
@@ -137,7 +128,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         }
 
         String rawcontent = entity.getContent();
-        Pattern pattern = Pattern.compile("[\\n\\s]+");
+        Pattern pattern = Pattern.compile("\\n[\\s]*");
         Matcher matcher = pattern.matcher(rawcontent);
         String replacement = "\n        ";
         StringBuffer strn = new StringBuffer();
@@ -180,67 +171,107 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         View view = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
         bottomSheetBehavior.setContentView(view);
 
+
         sharelayout = view.findViewById(R.id.share_item);
         favoratelayout = view.findViewById(R.id.favorate_item);
         blockinglayout = view.findViewById(R.id.blocking_item);
+        sharemomentslayout = view.findViewById(R.id.share_moments);
         sharelayout.setOnClickListener(this);
         favoratelayout.setOnClickListener(this);
         blockinglayout.setOnClickListener(this);
-
-
-//        bottomSheetBehavior = BottomSheetBehavior.from(bottomsheetlayout);
-//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        sharemomentslayout.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.share_item:
+//                if (!ShareMultiImageToWeChatUtil.isInstallWeChart(getApplicationContext())) {
+//                    Toast.makeText(getApplicationContext(), "您没有安装微信", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }else {}
+
+                if (entity.getImage().size() < 1) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, "#From NewestNews#\n"+entity.getTitle());
+                    startActivity(Intent.createChooser(intent, "share"));
+//                        shareText(getApplicationContext(), entity.getContent());
+                } else {
+                    ImageLoader.getInstance().loadImage(entity.getImage().get(0), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) { }
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) { }
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            if(loadedImage==null){
+                                Toast.makeText(getApplicationContext(), "null bitmap", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            checkPermission();
+                            Uri uri = shareUtils.getImageUri(SingleNews.this, loadedImage);
+                            Bitmap textmap = shareUtils.textAsBitmap(entity.getContent(), 30);
+                            Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
+                            ArrayList<Uri> urislist = new ArrayList<>();
+                            urislist.add(uri);
+                            urislist.add(textUri);
+                            shareWechatImages(SingleNews.this, "sing a song", urislist);
+//                                shareWechatMoment(SingleNews.this, "sing a song", uri);
+//                                shareWechatFriend(SingleNews.this, "what are you doing", uri);
+                        }
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) { }
+                    });
+                }
+
+//                Toast.makeText(getApplicationContext(), "click share", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.share_moments:
+                Toast.makeText(getApplicationContext(), "click moments", Toast.LENGTH_LONG).show();
                 if (!ShareMultiImageToWeChatUtil.isInstallWeChart(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(), "您没有安装微信", Toast.LENGTH_SHORT).show();
                     return;
                 }else {
                     if (entity.getImage().size() < 1) {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT, entity.getTitle());
-                        startActivity(Intent.createChooser(intent, "share"));
+                        Bitmap textmap = shareUtils.textAsBitmap("#From NewestNews#\n"+entity.getContent(), 30);
+                        Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
+                        shareWechatMoment(SingleNews.this, "friends", textUri);
 //                        shareText(getApplicationContext(), entity.getContent());
                     } else {
                         ImageLoader.getInstance().loadImage(entity.getImage().get(0), new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {
-
                             }
 
                             @Override
                             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
                             }
 
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                if(loadedImage==null){
+                                if (loadedImage == null) {
                                     Toast.makeText(getApplicationContext(), "null bitmap", Toast.LENGTH_LONG).show();
                                     return;
                                 }
                                 checkPermission();
-//                                Uri uri = saveImageToGallery(SingleNews.this, loadedImage);
-                                Uri uri = getImageUri(SingleNews.this, loadedImage);
-                                shareWechatFriend(SingleNews.this, "what are you doing", uri);
+                                Uri uri = shareUtils.getImageUri(SingleNews.this, loadedImage);
+//                                Bitmap textmap = shareUtils.textAsBitmap(entity.getContent(), 30);
+//                                Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
+//                                ArrayList<Uri> urislist = new ArrayList<>();
+//                                urislist.add(uri);
+//                                urislist.add(textUri);
+                                shareWechatMoment(SingleNews.this, "sing a song", uri);
 //                                shareWechatMoment(SingleNews.this, "sing a song", uri);
+//                                shareWechatFriend(SingleNews.this, "what are you doing", uri);
                             }
 
                             @Override
                             public void onLoadingCancelled(String imageUri, View view) {
-
                             }
                         });
-                        shareWechatFriend(SingleNews.this, entity.getTitle(), Uri.parse(entity.getImage().get(0)));
-//                        shareWechatFriend(SingleNews.this, entity.getTitle(),resourceIdToUri(getApplicationContext(), R.drawable.round_dashboard_24));
                     }
                 }
-//                Toast.makeText(getApplicationContext(), "click share", Toast.LENGTH_LONG).show();
                 break;
             case R.id.favorate_item:
                 entity.setFlag(1);
@@ -248,6 +279,8 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                 dataRepository.addNewsToBrowsedNews(entity);
                 UserProfile userProfile = UserProfile.getInstance();
                 userProfile.addFavorate(entity.getCategories(), entity.getKeyscore());
+                Gson gson = new Gson();
+                Reception.uploadItem(LogController.getInstance(null).getUsername(), gson.toJson(entity));
                 Toast.makeText(getApplicationContext(), "added to favorates", Toast.LENGTH_LONG).show();
                 break;
             case R.id.blocking_item:
@@ -261,28 +294,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 
     }
 
-    private Uri getImageUri(Context context, Bitmap inImage) {
 
-        ContentValues values=new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE,"Title");
-        values.put(MediaStore.Images.Media.DESCRIPTION,"From Camera");
-
-        Uri path=getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
-
-        if(path != null){
-            OutputStream imageout = null;
-            try{
-                imageout = getContentResolver().openOutputStream(path);
-                inImage.compress(Bitmap.CompressFormat.JPEG, 100, imageout);
-                imageout.close();
-            }catch (IOException e){
-
-            }
-        }
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        return path;
-    }
 
     private void checkPermission(){
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -351,50 +363,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-    public void initImageLoader() {
-        // 获取默认的路径
-
-        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                getApplicationContext())
-                // 设置内存图片的宽高
-                .memoryCacheExtraOptions(480, 800)
-                // default = device screen dimensions
-                // 缓存到磁盘中的图片宽高
-                .diskCacheExtraOptions(480, 800, null)
-                // .taskExecutor(null)
-                // .taskExecutorForCachedImages()
-                .threadPoolSize(3)
-                // default 线程优先级
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                // default
-                .tasksProcessingOrder(QueueProcessingType.FIFO)
-                // // default设置在内存中缓存图像的多种尺寸
-                //加载同一URL图片时,imageView从小变大时,从内存缓存中加载
-                .denyCacheImageMultipleSizesInMemory()
-                // 超过设定的缓存大小时,内存缓存的清除机制
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                // 内存的一个大小
-                .memoryCacheSize(2 * 1024 * 1024)
-                .memoryCacheSizePercentage(13)
-                // default 将图片信息缓存到该路径下
-                .diskCache(new UnlimitedDiskCache(cacheDir))
-                // default 磁盘缓存的大小
-                .diskCacheSize(50 * 1024 * 1024)
-                // 磁盘缓存文件的个数
-                .diskCacheFileCount(100)
-                //磁盘缓存的文件名的命名方式//一般使用默认值 (获取文件名称的hashcode然后转换成字符串)或MD5 new Md5FileNameGenerator()源文件的名称同过md5加密后保存
-                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
-                // 设置默认的图片加载
-                .imageDownloader(
-                        new BaseImageDownloader(getApplicationContext())) // default
-                // 使用默认的图片解析器
-                .imageDecoder(new BaseImageDecoder(true)) // default
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
-                .writeDebugLogs().build();
-        ImageLoader.getInstance().init(config);
     }
 
 }
