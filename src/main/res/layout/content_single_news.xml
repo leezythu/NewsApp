@@ -62,12 +62,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@mipmap/banner"-->
+<!--                android:id="@+id/imgs"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:contentDescription="TODO" />-->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/banner"
-                android:scaleType="centerCrop"
-                android:contentDescription="TODO" />
+                android:id="@+id/image2"
+                android:scaleType="centerCrop"/>
+            <VideoView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/videos"/>
         </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="match_parent"

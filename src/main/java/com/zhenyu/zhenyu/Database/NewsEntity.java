@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,8 @@ public class NewsEntity {
 
     //    private String data;
     @ColumnInfo(name = "image")
-    private String image = "";
+    @TypeConverters({StringListConverter.class})
+    private List<String> image;
 
     @ColumnInfo(name = "publishTime")
     private String publishTime = "";
@@ -62,14 +65,14 @@ public class NewsEntity {
         this.newsid = "1"; this.stringkeywords = "";
         this.title = "";this.content = ""; this.publishTime = "";
         this.categories = ""; this.keyscore = new HashMap<>(); this.flag = 0;
-        this.image = "";
+        this.image = new ArrayList<>();
         entryTime = 1111111;
         publisher = "";
         hfflag = 0;
         viewTime = 0;
     }
 
-    public NewsEntity(String newsid, String image, String publishTime, String title,
+    public NewsEntity(String newsid, List<String> image, String publishTime, String title,
                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, int flag){
         this.newsid = newsid;
         this.image = image;
@@ -88,7 +91,7 @@ public class NewsEntity {
 
     public void setPublisher(String publisher){this.publisher = publisher;}
     public void setNewsid(String newsid){ this.newsid = newsid;}
-    public void setImage(String image){ this.image = image; }
+    public void setImage(List<String> image){ this.image = image; }
     public void setPublishTime(String publishTime) { this.publishTime = publishTime; }
     public void setTitle(String title){ this.title = title; }
     public void setContent(String content){ this.content = content; }
@@ -102,7 +105,7 @@ public class NewsEntity {
 
     public String getPublisher(){return  this.publisher;}
     public String getNewsid(){return this.newsid;}
-    public String getImage(){return this.image;}
+    public List<String> getImage(){return this.image;}
     public String getPublishTime(){return this.publishTime;}
     public String getTitle(){return this.title;}
     public String getContent(){return this.content;}

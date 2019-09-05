@@ -2,7 +2,10 @@ package com.zhenyu.zhenyu.RequestData;
 
 import android.graphics.drawable.shapes.PathShape;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zhenyu.zhenyu.Database.NewsEntity;
+import com.zhenyu.zhenyu.Database.StringListConverter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NetNews {
     //    private String pageSize;
@@ -79,7 +84,13 @@ public class NetNews {
                 e.getMessage();
             }
         }
-        return new NewsEntity(temp.newsID, temp.image, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, flag);
+        Gson gson = new Gson();
+        List<String> w = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(https?://[\\d\\w/.]+)[\\s,\\]]");
+        Matcher m = pattern.matcher(temp.image);
+        while (m.find())
+            w.add(m.group(1));
+        return new NewsEntity(temp.newsID, w, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, flag);
     }
 
     public List<NewsEntity> toNewsList(int flag){
