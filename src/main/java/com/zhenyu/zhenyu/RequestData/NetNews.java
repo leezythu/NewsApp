@@ -6,10 +6,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.Database.StringListConverter;
+import com.zhenyu.zhenyu.user.UserProfile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +57,8 @@ public class NetNews {
         return String.valueOf(this.data.get(0).keywords.get(0).word);
     }
     public int getNumbereOfData() {return data.size();}
-    public NewsEntity toNewsEntity(int index, int flag){
+
+    public NewsEntity toNewsEntity(int index, int flag, HashSet<String> blocks){
         int keywordCnt = 0;
         NewsData temp;
         try {
@@ -67,13 +71,20 @@ public class NetNews {
         HashMap<String, Double> keyscores = new HashMap<>();
         for(NewsData.KeyWords tt: temp.keywords){
             keyscores.put(tt.word, tt.score);
+            if(blocks.contains(tt.word))
+                return null;
         }
         StringBuilder temps = new StringBuilder();
         for(String v:keyscores.keySet()) {
             temps.append(v);
             temps.append(" ");
         }
-        String stringkeywords = temps.toString();
+        String stringkeywords = "123";
+        try{
+            stringkeywords = new String(temps.toString().getBytes("GB2312"),StandardCharsets.UTF_8);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         if(temp.publisher.equals("其他")) {
@@ -96,8 +107,14 @@ public class NetNews {
     public List<NewsEntity> toNewsList(int flag){
         int entityNum = data.size();
         List<NewsEntity> res = new ArrayList<>();
-        for(int i = 0 ; i < entityNum; i++)
-            res.add(toNewsEntity(i, flag));
+        UserProfile userProfile = UserProfile.getInstance();
+        HashSet<String> block = userProfile.getBlockingWords();
+        for(int i = 0 ; i < entityNum; i++) {
+            NewsEntity temp = toNewsEntity(i, flag, block);
+            if(temp == null)
+                continue;
+            res.add(temp);
+        }
         return res;
     }
 }

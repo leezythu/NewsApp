@@ -51,6 +51,9 @@ public interface NewsEntityDao {
     @Query("select * FROM AugustNews where stringkeywords LIKE '%'||:key1||'%' AND stringkeywords LIKE '%'||:key2||'%'")
     LiveData<List<NewsEntity>> searchNewsByTwoKeyWords(String key1, String key2);
 
+    @Query("delete FROM AugustNews where stringkeywords LIKE '%'||:key1||'%'")
+    void shiedNews(String key1);
+
     //For recommendation
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addRecommendedNews(NewsEntity newsEntity);
@@ -69,4 +72,9 @@ public interface NewsEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addViewedAll(List<NewsEntity> newsEntity);
 
+    @Query("delete from AugustNews where stringkeywords LIKE '%'|| :key1 || '%'")
+    void removeByKeys(String key1);
+
+    @Query("delete from AugustNews where newsid = :newid")
+    void removeById(String newid);
 }

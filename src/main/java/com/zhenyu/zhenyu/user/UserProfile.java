@@ -29,7 +29,7 @@ public class UserProfile {
             preferrence.put(va, new sField(va));
         String[] cates = {"科技", "娱乐", "军事","体育","财经","健康","教育","社会", "汽车","文化"};
         for(String va : cates)
-            catePreference.put(va, 0.1);
+            catePreference.put(va, 0.);
         blockingWords = new HashSet<>();
         dislikedWords = new HashSet<>();
 
@@ -106,12 +106,12 @@ public class UserProfile {
         Random w = new Random();
         double rd = (double)w.nextInt(100) / 100.;
         for(Double db : catePreference.values())
-            sums += db;
+            sums += Math.exp(db);
         if(sums < 0.5)
             return null;
         System.out.println("random is :" + rd);
         for(Map.Entry<String, Double> entry : catePreference.entrySet()){
-            rm += entry.getValue()/sums;
+            rm += Math.exp(entry.getValue())/sums;
             System.out.println("calculated sum : " + rm + " " + entry.getKey());
             if(rm >= rd)
                 return entry.getKey();
@@ -125,5 +125,6 @@ public class UserProfile {
     public String seeCategory(){
         return catePreference.toString();
     }
+    public HashSet<String> getBlockingWords() { return blockingWords; }
 
 }

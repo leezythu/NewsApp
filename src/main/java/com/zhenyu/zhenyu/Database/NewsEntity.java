@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity(tableName = "AugustNews")
-public class NewsEntity {
+public class NewsEntity implements Cloneable{
     @PrimaryKey
     @NonNull
     private  String newsid;
@@ -46,7 +46,7 @@ public class NewsEntity {
 
     @ColumnInfo(name = "flag")
     private int flag = 0; // display in "homepage or categorical page"
-                      // 0 is homepage, 1 is categorical page, 2 is recommendedNews
+                      // 0 is homepage, 1 is categorical page, 2 is recommendedNews,  3 is search result
 
     @ColumnInfo(name = "entryTime")
     private long entryTime = 111111;

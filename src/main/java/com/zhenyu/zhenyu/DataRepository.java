@@ -94,8 +94,8 @@ public class DataRepository {
         return mObservableNews;
     }
     public LiveData<List<NewsEntity>> getCategoricalNews(String category){ return appDatabase.getNewsEntityDao().getCategoricalNews(category);}
-    public LiveData<List<NewsEntity>> getnewsHistorical(){return appDatabase.getNewsEntityDao().getHistorical();}
-    public LiveData<List<NewsEntity>> getnewsLiked(){return appDatabase.getNewsEntityDao().getliked();}
+//    public LiveData<List<NewsEntity>> getnewsHistorical(){return appDatabase.getNewsEntityDao().getHistorical();}
+//    public LiveData<List<NewsEntity>> getnewsLiked(){return appDatabase.getNewsEntityDao().getliked();}
     public void addnewsHis(NewsEntity newsEntity){ appDatabase.getNewsEntityDao().addViewed(newsEntity);}
 
     public LiveData<List<BrowsedNews>> getHistoricalNews(){ return appDatabase.getBrowsedNewsDao().getHistoryNews(); }
@@ -103,5 +103,12 @@ public class DataRepository {
 
     public LiveData<List<NewsEntity>> getSearchResult(String keyword){ return appDatabase.getNewsEntityDao().searchNewsByOneKeyword(keyword);}
 
+    public void removeByKeywords(String mkeys){
+        appDatabase.getNewsEntityDao().removeByKeys(mkeys);
+    }
+
+    public void removeById(String w){
+        appDatabase.getNewsEntityDao().removeById(w);
+    }
 }
 

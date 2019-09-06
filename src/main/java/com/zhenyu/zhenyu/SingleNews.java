@@ -10,9 +10,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,6 +65,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private ImageView imageView;
     private NewsEntity entity;
     private VideoView videoView;
+    private LogController logController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         Bundle bundle = intent.getExtras();
         newsid = bundle.getString("newsid");
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
+        logController = LogController.getInstance(null);
 
         if(!imgins) {
             shareUtils.initImageLoader(getApplicationContext());
@@ -106,11 +110,36 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         }
         initpage();
         initbottonsheet();
+
+
+        Button button = findViewById(R.id.pullbutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "click pull", Toast.LENGTH_LONG).show();
+                Reception.syncToLocal("zhenyu");
+            }
+        });
+
+        Button button1 = findViewById(R.id.clean);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "clean all", Toast.LENGTH_LONG).show();
+                Reception.cleanall("zhenyu");
+            }
+        });
+        Button button2 = findViewById(R.id.logout);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "logout", Toast.LENGTH_LONG).show();
+                Reception.usrLogout("zhenyu", "zhenyu");
+            }
+        });
     }
     public void initpage(){
         entity = dataRepository.loadNewsById(newsid);
-//        Toast.makeText(getApplicationContext(), entity.getContent(), Toast.LENGTH_LONG).show();
-//        assert titleview != null;
 
         TextView titleview = findViewById(R.id.titleview);
         TextView contentview = findViewById(R.id.mycontentview);
@@ -149,9 +178,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         entity.setFlag(0);
         entity.setEntryTime(new Date().getTime());
         dataRepository.addNewsToBrowsedNews(entity);
-
-//        Toast.makeText(getApplicationContext(), userProfile.seeCategory(), Toast.LENGTH_SHORT).show();
-
     }
 
 
@@ -162,10 +188,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     }
 
     public void initbottonsheet(){
-
-//        moreview = findViewById(R.id.moreaction);
-//        moreview.setOnClickListener(this);
-
         bottomsheetlayout = (LinearLayout) findViewById(R.id.bottomsheet);
         bottomSheetBehavior = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
@@ -279,9 +301,11 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                 dataRepository.addNewsToBrowsedNews(entity);
                 UserProfile userProfile = UserProfile.getInstance();
                 userProfile.addFavorate(entity.getCategories(), entity.getKeyscore());
-                Gson gson = new Gson();
-                Reception.uploadItem(LogController.getInstance(null).getUsername(), gson.toJson(entity));
-                Toast.makeText(getApplicationContext(), "added to favorates", Toast.LENGTH_LONG).show();
+                if(logController.getOnline().getValue()) {
+                    Gson gson = new Gson();
+                    Reception.uploadItem(LogController.getInstance(null).getUsername(), entity.getNewsid(), gson.toJson(entity));
+                    Toast.makeText(getApplicationContext(), "added to favorates", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.blocking_item:
                 Toast.makeText(getApplicationContext(), "click blocking", Toast.LENGTH_LONG).show();
@@ -299,23 +323,12 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private void checkPermission(){
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 showDialog("External storage", this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             } else {
-                // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
             // Permission has already been granted

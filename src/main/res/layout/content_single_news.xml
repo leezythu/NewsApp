@@ -89,34 +89,21 @@
             android:id="@+id/mycontentview"
             android:textSize="15sp"
             />
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggle_button_group"
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="private"/>
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="team"/>
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="everyone"/>
-
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="custom"/>
-
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+            android:layout_height="wrap_content"
+            android:id="@+id/pullbutton"
+            android:text="pull"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/clean"
+            android:text="cleanall"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout"
+            android:text="logout"/>
     </LinearLayout>
 
 

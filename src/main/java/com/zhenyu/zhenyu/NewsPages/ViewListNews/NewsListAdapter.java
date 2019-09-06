@@ -13,8 +13,8 @@ import com.zhenyu.zhenyu.Database.NewsEntity;
 import java.util.List;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListHolder> {
-    List<NewsEntity> currentNews;
-
+    private List<NewsEntity> currentNews;
+    private RecyclerItemClickListener.OnItemClickListener itemClickListener;
     @NonNull
     @Override
     public NewsListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,8 +34,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListHolder> {
 
     public void setNewsData(List<NewsEntity> newdata) {
         if(currentNews == null) {
-            currentNews = newdata;
-            notifyItemRangeInserted(0, currentNews.size());
+            if(newdata != null) {
+                currentNews = newdata;
+                notifyItemRangeInserted(0, currentNews.size());
+            }
         }else{
             currentNews = newdata;
         }
@@ -44,5 +46,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListHolder> {
 
     public String getHolderId(int position){
         return currentNews.get(position).getNewsid();
+    }
+
+    public void removed(){
+        notifyDataSetChanged();
     }
 }

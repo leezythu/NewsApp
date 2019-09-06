@@ -16,7 +16,7 @@ public class LogController extends ViewModel {
     private MutableLiveData<Boolean> online;
     private MutableLiveData<String> loginfo;
     private String username;
-
+    private String password;
 
     private LogController(Context ctx){
         context = ctx;
@@ -34,7 +34,10 @@ public class LogController extends ViewModel {
     }
 
     public void mlogin(String loginfo){
-        Toast.makeText(context, loginfo, Toast.LENGTH_LONG).show();
+        if(loginfo != null) {
+            Toast.makeText(context, loginfo, Toast.LENGTH_LONG).show();
+        }else
+            Toast.makeText(context, "null loginfo", Toast.LENGTH_LONG).show();
     }
 
     public void mloginSuccessfully(){
@@ -43,14 +46,17 @@ public class LogController extends ViewModel {
 
     public void mlogout(){
         online.setValue(false);
+        username = "";
+        password = "";
     }
     public void setLoginfo(String info) { loginfo.postValue(info);}
     public void setUsername(String username){ this.username = username;}
+    public void setPassword(String password){ this.password = password;}
 
     public MutableLiveData<Boolean> getOnline(){
         return online;
     }
     public MutableLiveData<String> getLoginfo() {return loginfo; }
     public String getUsername(){ return username; }
-
+    public String getPassword(){ return password; }
 }

@@ -32,11 +32,11 @@ public interface GetRequest_Interfece {
     Call<LoginEntity> log_out(@FieldMap Map<String, String> param);
 
     @GET("favorate/")
-    Call<List<NewsEntity>> pullFavorate(@QueryMap Map<String, String> param);
+    Call<LoginEntity> pullFavorate(@QueryMap Map<String, String> param);
 
     @FormUrlEncoded
     @POST("add/")
-    Call<LoginEntity> uploadNew(@QueryMap Map<String, String> param);
+    Call<LoginEntity> uploadNew(@FieldMap Map<String, String> param);
 
     @FormUrlEncoded
     @POST("cleanall/")

@@ -12,8 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
-import com.zhenyu.zhenyu.NewsPages.Searchpage;
+import com.zhenyu.zhenyu.NewsPages.searchGadget.Searchpage;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 
 public class Search extends AppCompatActivity {
@@ -33,19 +32,34 @@ public class Search extends AppCompatActivity {
 //        mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mStrs));
 //        mListView.setTextFilterEnabled(true);
 
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        blankfragment fragment = blankfragment.newInstance("page1","search");
+        /* SearchFragment fragment=new SearchFragment(); */
+        transaction.add(R.id.search_res_fragment, (Fragment) fragment, "dynamicFragment");
+        transaction.commit();
+
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             // 当点击搜索按钮时触发该方法
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(),"搜索内容为：", Toast.LENGTH_LONG).show();
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                PlaceHolderFragment fragment = Searchpage.newInstance(0, "天");
-                /* SearchFragment fragment=new SearchFragment(); */
-                transaction.add(R.id.search_res_fragment, (Fragment) fragment,"dynamicFragment");
-                transaction.commit();
-                return false;
+                if(query.length() > 0) {
+                    Toast.makeText(getApplicationContext(), "搜索内容为：" + query, Toast.LENGTH_LONG).show();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    Searchpage fragment = Searchpage.newInstance(0, "天");
+                    /* SearchFragment fragment=new SearchFragment(); */
+                    transaction.replace(R.id.search_res_fragment, (Fragment) fragment, "dynamicFragment");
+                    transaction.commit();
+                    mSearchView.setIconified(true);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
             }
 
             // 当搜索内容改变时触发该方法

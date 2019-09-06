@@ -31,7 +31,13 @@ public class Login extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean) {
                     logController.setUsername(usernameEdit.getText().toString());
-                    Login.this.onDestroy();
+                    logController.setPassword(passwordEdit.getText().toString());
+//                    try {
+//                        Thread.sleep(1000);
+//                    }catch (Exception e){
+//                        e.printStackTrace();
+//                    }
+//                    Login.this.finish();
                 }
             }
         });

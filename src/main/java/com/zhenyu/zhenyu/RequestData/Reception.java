@@ -1,19 +1,24 @@
 package com.zhenyu.zhenyu.RequestData;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
+import com.zhenyu.zhenyu.Database.BrowsedNews;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.Login;
 import com.zhenyu.zhenyu.SingleNews;
 import com.zhenyu.zhenyu.user.UserProfile;
 import com.zhenyu.zhenyu.utils.LogController;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +217,7 @@ public class Reception {
         });
     }
 
-    public static void usrLogout(@NonNull String usrname){
+    public static void usrLogout(@NonNull String usrname, @NonNull String password){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(logbaseurl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -220,6 +225,7 @@ public class Reception {
         GetRequest_Interfece service = retrofit.create(GetRequest_Interfece.class);
         Map<String, String> usrinfo = new HashMap<>();
         usrinfo.put("username", usrname);
+        usrinfo.put("password", password);
 
         final LogController logController = LogController.getInstance(null);
         Call<LoginEntity> usr = service.log_out(usrinfo);
@@ -273,20 +279,36 @@ public class Reception {
         GetRequest_Interfece service = retrofit.create(GetRequest_Interfece.class);
         Map<String, String> usrinfo = new HashMap<>();
         usrinfo.put("username", username);
-        Call<List<NewsEntity>> usr = service.pullFavorate(usrinfo);
-        final LogController logController = LogController.getInstance(null);
-        usr.enqueue(new Callback<List<NewsEntity>>() {
+        Call<LoginEntity> usr = service.pullFavorate(usrinfo);
+        Log.w("sync", "in sync local");
+        usr.enqueue(new Callback<LoginEntity>() {
             @Override
-            public void onResponse(Call<List<NewsEntity>> call, Response<List<NewsEntity>> response) {
+            public void onResponse(Call<LoginEntity> call, Response<LoginEntity> response) {
                 if(response.body() != null) {
-                    appDatabase.getNewsEntityDao().addNewsAll(response.body());
+                    if(response.body().getIcode() == 200) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<String>>() {}.getType();
+                        List<String> ww = gson.fromJson(response.body().getInfo(), listType);
+                        Gson engson = new Gson();
+                        Type entType = new TypeToken<NewsEntity>() {}.getType();
+                        for(String temp:ww) {
+                            NewsEntity a = engson.fromJson(temp, entType);
+                            Log.w("sync", " "+a.getTitle() + a.getFlag());
+                            appDatabase.getBrowsedNewsDao().addBrowesedNews(new BrowsedNews(a));
+                        }
+                        Log.w("sync", "getFavorate Successfully" + ww.size());
+                    }else{
+                        Log.w("sync", "getFavorate but failed");
+                        LogController.getInstance(null).setLoginfo(response.body().getInfo());
+                    }
                 }else {
-
+                    Log.w("sync", "null favorate");
+                    LogController.getInstance(null).setLoginfo("null body in get favorate");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<NewsEntity>> call, Throwable t) {
+            public void onFailure(Call<LoginEntity> call, Throwable t) {
                 System.out.println(t.getMessage());
             }
         });

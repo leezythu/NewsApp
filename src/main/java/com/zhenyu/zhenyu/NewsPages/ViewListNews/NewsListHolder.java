@@ -19,7 +19,7 @@ import com.zhenyu.zhenyu.Database.NewsEntity;
 
 import org.w3c.dom.Text;
 
-public class NewsListHolder extends RecyclerView.ViewHolder {
+public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private TextView titleView;
     private TextView dateView;
     private TextView categoryv;
@@ -49,5 +49,10 @@ public class NewsListHolder extends RecyclerView.ViewHolder {
     }
     public String getIdx(){
         return idx;
+    }
+
+    @Override
+    public void onClick(View view){
+
     }
 }
