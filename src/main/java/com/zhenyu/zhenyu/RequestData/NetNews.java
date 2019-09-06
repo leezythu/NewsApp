@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.Database.StringListConverter;
 import com.zhenyu.zhenyu.user.UserProfile;
+import com.zhenyu.zhenyu.utils.tools;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -76,12 +77,17 @@ public class NetNews {
         }
         StringBuilder temps = new StringBuilder();
         for(String v:keyscores.keySet()) {
+//            String as = tools.addkeyone(v);
+//            temps.append(as);
             temps.append(v);
             temps.append(" ");
         }
-        String stringkeywords = "123";
+        String stringkeywords = temps.toString();
         try{
-            stringkeywords = new String(temps.toString().getBytes("GB2312"),StandardCharsets.UTF_8);
+//            String tstr = temps.toString();
+//            String code = tools.getEncoding(tstr);
+//            stringkeywords = new String(temps.toString().getBytes(code),StandardCharsets.UTF_8);
+
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -33,7 +33,9 @@ import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.NewsPages.ViewListNews.NewsListAdapter;
 import com.zhenyu.zhenyu.NewsPages.ViewListNews.RecyclerItemClickListener;
 import com.zhenyu.zhenyu.SingleNews;
+import com.zhenyu.zhenyu.user.UserProfile;
 import com.zhenyu.zhenyu.utils.DateControl;
+import com.zhenyu.zhenyu.utils.tools;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -93,19 +95,20 @@ public class PlaceHolderFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         RefreshLayout refreshLayout = (RefreshLayout)root.findViewById(R.id.refreshlays);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd hh:mm-ss");
+        final String nowtime = simpleDateFormat.format(new Date());
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd hh:mm-ss");
-                String nowtime = simpleDateFormat.format(new Date());
+
                 String enddate = dateControl.getFormatDate();
                 String startdate = dateControl.backday();
                 if(CategoryS.equals("首页"))
-                    Reception.request(null, null, null, nowtime, 0);
+                    Reception.request(null, null, startdate, enddate, 0);
                 else if(CategoryS.equals("推荐")) {
-                        Reception.requestRecommended(null, null, null, nowtime);
-                        Reception.requestRecommended(null, null, null, nowtime);
-                        Reception.requestRecommended(null, null, null, nowtime);
+                        Reception.requestRecommended(null, null, startdate, enddate);
+                        Reception.requestRecommended(null, null, startdate, enddate);
+                        Reception.requestRecommended(null, null, startdate, nowtime);
                 }
                 else
                     Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
@@ -118,9 +121,9 @@ public class PlaceHolderFragment extends Fragment {
                 String enddate = dateControl.getFormatDate();
                 String startdate = dateControl.backday();
                 if(CategoryS.equals("首页"))
-                    Reception.request(null, null, startdate, enddate, 0);
+                    Reception.request(null, null, startdate,nowtime , 0);
                 else if(CategoryS.equals("推荐")) {
-                    Reception.requestRecommended(null, null, startdate, enddate);
+                    Reception.requestRecommended(null, null, startdate, nowtime);
                 }
                 else
                     Reception.request(null, CategoryS, startdate, enddate, pageViewModel.getMflag());
@@ -151,7 +154,6 @@ public class PlaceHolderFragment extends Fragment {
 
                         intent.putExtras(bundle);
                         startActivity(intent);
-
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -159,26 +161,32 @@ public class PlaceHolderFragment extends Fragment {
                         String newpageid = mnewsAdapter.getHolderId(position);
                         NewsEntity newsEntity = dataRepository.loadNewsById(newpageid);
                         List<String> params = new ArrayList<>(newsEntity.getKeyscore().keySet());
-                        String[] paramstr  = new String[4];
+                        String[] paramstr  = new String[Math.min(4, params.size())];
 
                         try {
-                            List<NewsEntity> ss = dataRepository.getSearchResult(new String(params.get(0).getBytes(), StandardCharsets.UTF_8)).getValue();
+                            String code1 = tools.getEncoding("%"+params.get(0)+"%");
+                            Toast.makeText(getContext(), "" + code1, Toast.LENGTH_SHORT).show();
+                            List<NewsEntity> ss = dataRepository.getSearchResult(new String(("%" + params.get(0)+"%").getBytes(code1), StandardCharsets.UTF_8)).getValue();
                             if (ss == null) {
-                                Toast.makeText(getContext(), "length:null", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "length:null:" + newsEntity.getStringkeywords(), Toast.LENGTH_SHORT).show();
                             } else
                                 Toast.makeText(getContext(), "length:" + ss.size(), Toast.LENGTH_SHORT).show();
                         }catch(Exception e){
                             e.printStackTrace();
                         }
 
-                        for(int i = 0 ; i < 4; i++)
-                            paramstr[i] = "不想看: "+params.get(i);
+                        for(int i = 0 ; i < paramstr.length; i++) {
+                            paramstr[i] = "不想看: " + params.get(i);
+                        }
                         showMultiChoiceDialog(paramstr);
 
+                        UserProfile userProfile = UserProfile.getInstance();
 //                        dataRepository.removeById(newpageid);
                         try {
                             for (Integer w : yourChoices) {
-                                dataRepository.removeByKeywords(new String(params.get(w).getBytes("GB2312"), StandardCharsets.UTF_8));
+                                String codet = tools.getEncoding(params.get(w));
+                                userProfile.addBlockingWords(params.get(w));
+//                                dataRepository.removeByKeywords(new String(params.get(w).getBytes(codet), StandardCharsets.UTF_8));
                             }
                         }catch (Exception e){
                             e.printStackTrace();
@@ -212,7 +220,7 @@ public class PlaceHolderFragment extends Fragment {
 
         final String[] items = keys;
         // 设置默认选中的选项，全为false默认均未选中
-        final boolean initChoiceSets[]={false,false,false,false};
+        final boolean[] initChoiceSets = new boolean[keys.length];
         yourChoices.clear();
         AlertDialog.Builder multiChoiceDialog =
                 new AlertDialog.Builder(getContext());

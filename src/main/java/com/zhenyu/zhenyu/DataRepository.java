@@ -69,11 +69,14 @@ public class DataRepository {
 //        appDatabase.getBrowsedNewsDao().addBrowesedNews(new BrowsedNews(newsEntity));
 //    }
 
-    void addNewsToBrowsedNews(NewsEntity newsEntity){
+    public void addNewsToBrowsedNews(NewsEntity newsEntity){
         List<BrowsedNews> ww = new ArrayList<>();
         ww.add(new BrowsedNews(newsEntity));
         Log.i("add one news", "to browsed");
         appDatabase.getBrowsedNewsDao().addBrowsedNewsAll(ww);
+    }
+    public void addNewsViewed(NewsEntity newsEntity){
+        appDatabase.getNewsEntityDao().addNews(newsEntity);
     }
 
     public int getDatabaseSize() {
@@ -102,7 +105,7 @@ public class DataRepository {
     public LiveData<List<BrowsedNews>> getLikedNews(){ return appDatabase.getBrowsedNewsDao().getLikedNews(); }
 
     public LiveData<List<NewsEntity>> getSearchResult(String keyword){ return appDatabase.getNewsEntityDao().searchNewsByOneKeyword(keyword);}
-
+    public LiveData<List<NewsEntity>> getSearchFormat(String keyword){ return appDatabase.getNewsEntityDao().searchFormat(keyword); }
     public void removeByKeywords(String mkeys){
         appDatabase.getNewsEntityDao().removeByKeys(mkeys);
     }

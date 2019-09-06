@@ -49,6 +49,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListHolder> {
     }
 
     public void removed(){
-        notifyDataSetChanged();
+
     }
 }

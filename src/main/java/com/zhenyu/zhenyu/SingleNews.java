@@ -178,6 +178,8 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         entity.setFlag(0);
         entity.setEntryTime(new Date().getTime());
         dataRepository.addNewsToBrowsedNews(entity);
+        entity.setHfflag(1);
+        dataRepository.addNewsViewed(entity);
     }
 
 

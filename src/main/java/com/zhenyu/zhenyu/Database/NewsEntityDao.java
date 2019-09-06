@@ -44,6 +44,9 @@ public interface NewsEntityDao {
     @Query("select * FROM AugustNews where stringkeywords LIKE '%'||:keys||'%' order by entryTime desc")
     LiveData<List<NewsEntity>> searchNewsByOneKeyword(String keys);
 
+    @Query("select * FROM augustnews where stringkeywords LIKE :key1")
+    LiveData<List<NewsEntity>> searchFormat(String key1);
+
     @Query("select * FROM AugustNews where stringkeywords LIKE '%'||:key1||'%' OR stringkeywords LIKE '%'||:key2||'%'")
     LiveData<List<NewsEntity>> searchNewsByAnyoneKey(String key1, String key2);
 

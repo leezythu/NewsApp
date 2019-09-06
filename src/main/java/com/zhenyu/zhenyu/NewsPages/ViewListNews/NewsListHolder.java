@@ -19,6 +19,8 @@ import com.zhenyu.zhenyu.Database.NewsEntity;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private TextView titleView;
     private TextView dateView;
@@ -43,9 +45,18 @@ public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnCl
         idx = newsEntity.getNewsid();
         String imageUri = "https://hellorfimg.zcool.cn/preview260/224921422.jpg";
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
-        imageLoader.displayImage(imageUri, imageView);
+
         //浏览过的新闻变为灰色
-        titleView.setTextColor(Color.GRAY);
+        if(newsEntity.getHfflag() == 1)
+            titleView.setTextColor(Color.GRAY);
+
+        List<String> imgurl = newsEntity.getImage();
+        if(imgurl.size() < 1) {
+            imageLoader.displayImage(imageUri, imageView);
+//            imageView.setVisibility(View.GONE);
+        }else{
+            imageLoader.displayImage(imgurl.get(0), imageView);
+        }
     }
     public String getIdx(){
         return idx;
