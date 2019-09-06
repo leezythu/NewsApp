@@ -12,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.zhenyu.zhenyu.R;
 import com.zhenyu.zhenyu.Database.NewsEntity;
+import com.zhenyu.zhenyu.utils.tools;
 
 import org.w3c.dom.Text;
 
@@ -50,12 +52,13 @@ public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnCl
         if(newsEntity.getHfflag() == 1)
             titleView.setTextColor(Color.GRAY);
 
+        DisplayImageOptions options = tools.initOptions();
         List<String> imgurl = newsEntity.getImage();
         if(imgurl.size() < 1) {
-            imageLoader.displayImage(imageUri, imageView);
+            imageLoader.displayImage(imageUri, imageView, options);
 //            imageView.setVisibility(View.GONE);
         }else{
-            imageLoader.displayImage(imgurl.get(0), imageView);
+            imageLoader.displayImage(imgurl.get(0), imageView, options);
         }
     }
     public String getIdx(){

@@ -25,7 +25,7 @@ public class searchViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<NewsEntity>> getSearchRes(){return mobservable;}
     public void searchFor(String keys){
-        mobservable.setValue(dataRepository.getRecommendedNews().getValue());
+        mobservable.setValue(dataRepository.getHomePageNews().getValue());
 //        mobservable.setValue(dataRepository.getSearchResult(keys).getValue());
     }
 }

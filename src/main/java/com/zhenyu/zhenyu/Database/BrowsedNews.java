@@ -52,9 +52,12 @@ public class BrowsedNews {
     @ColumnInfo(name = "publisher")
     private String publisher = "";
 
+    @ColumnInfo(name = "videourl")
+    private String videourl;
+
 
     public BrowsedNews(String newsid, List<String> image, String publishTime, String title,
-                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, int flag){
+                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String videourl, int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -66,6 +69,7 @@ public class BrowsedNews {
         this.stringkeywords = stringkeywords;
         this.entryTime = entryTime;
         this.publisher = publisher;
+        this.videourl = videourl;
     }
 
     public BrowsedNews(){
@@ -75,6 +79,7 @@ public class BrowsedNews {
         this.image = new ArrayList<>();
         this.entryTime = 111;
         publisher = "";
+        this.videourl = "";
     }
 
     public BrowsedNews(NewsEntity newsEntity){
@@ -88,6 +93,7 @@ public class BrowsedNews {
         this.keyscore = newsEntity.getKeyscore();
         this.flag = newsEntity.getFlag();
         this.entryTime = new Date().getTime();
+        this.videourl = newsEntity.getVideourl();
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}
@@ -101,7 +107,7 @@ public class BrowsedNews {
     public void setFlag(int flag){ this.flag = flag; }
     public void setStringkeywords(String stringkeywords){ this.stringkeywords = stringkeywords; }
     public void setEntryTime(long entryTime){ this.entryTime = entryTime; }
-
+    public void setVideourl(String videourl){this.videourl = videourl;}
 
     //    public void setStringkeywords(String stringkeywords){ this.stringkeywords = stringkeywords; }
     public String getNewsid(){return this.newsid;}
@@ -115,4 +121,5 @@ public class BrowsedNews {
     public String getStringkeywords() {return this.stringkeywords;}
     public long getEntryTime() {return entryTime; }
     public String getPublisher(){return  this.publisher;}
+    public String getVideourl(){return videourl;}
 }

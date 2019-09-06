@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -29,6 +31,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -39,6 +42,7 @@ import com.zhenyu.zhenyu.user.UserProfile;
 import com.zhenyu.zhenyu.utils.LogController;
 import com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil;
 import com.zhenyu.zhenyu.utils.shareUtils;
+import com.zhenyu.zhenyu.utils.tools;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,9 +64,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private LinearLayout favoratelayout;
     private LinearLayout blockinglayout;
     private LinearLayout sharemomentslayout;
-//    private TextView titleview;
-//    private TextView contentview;
-    private ImageView imageView;
     private NewsEntity entity;
     private VideoView videoView;
     private LogController logController;
@@ -145,15 +146,38 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         TextView contentview = findViewById(R.id.mycontentview);
         TextView timeView = findViewById(R.id.timeview);
         TextView sourceView = findViewById(R.id.sourceview);
-        imageView = findViewById(R.id.image2);
+        //    private TextView titleview;
+        //    private TextView contentview;
+
+        ImageView imageView = findViewById(R.id.image2);
+        ImageView imageView1 = findViewById(R.id.image3);
+        ImageView imageView2 = findViewById(R.id.image4);
         List<String> imgurl = entity.getImage();
+
+        DisplayImageOptions options = tools.initOptions();
         if(imgurl.size() < 1) {
             imageView.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "image doesn't exist", Toast.LENGTH_LONG).show();
         }else{
             ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.displayImage(imgurl.get(0), imageView);
-            Toast.makeText(getApplicationContext(), imgurl.get(0), Toast.LENGTH_LONG).show();
+            switch (imgurl.size()) {
+                case 1:
+                    imageLoader.displayImage(imgurl.get(0), imageView, options);
+                    imageView1.setVisibility(View.GONE);
+                    imageView2.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), imgurl.get(0), Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    imageLoader.displayImage(imgurl.get(0), imageView, options);
+                    imageLoader.displayImage(imgurl.get(1), imageView1, options);
+                    imageView2.setVisibility(View.GONE);
+                    break;
+                default:
+                    imageLoader.displayImage(imgurl.get(0), imageView, options);
+                    imageLoader.displayImage(imgurl.get(1), imageView1, options);
+                    imageLoader.displayImage(imgurl.get(2), imageView2, options);
+                    break;
+            }
         }
 
         String rawcontent = entity.getContent();
@@ -172,14 +196,29 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         timeView.setText(entity.getPublishTime());
         sourceView.setText(entity.getPublisher());
 
+
+        videoView = (VideoView) findViewById(R.id.videos);
+        //设置视频控制器,组件可以控制视频的播放，暂停，快进，组件，不需要你实现
+        MediaController mc = new MediaController(this);
+        videoView.setMediaController(mc);
+        String netPlayUrl="http://baobab.wdjcdn.com/145076769089714.mp4";
+        Uri uri = Uri.parse(netPlayUrl);
+        videoView.setVideoURI(uri);//设置视频的播放地址，网络地址。播放网络视频
+//        //播放本地视频
+//        videoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"video.mp4");
+        videoView.requestFocus();//让VideiView获取焦点
+        videoView.start();//开始播放
+
+
+
         // handle user preference
         UserProfile userProfile = UserProfile.getInstance();
         userProfile.addkeys(entity.getCategories(), entity.getKeyscore());
         entity.setFlag(0);
         entity.setEntryTime(new Date().getTime());
         dataRepository.addNewsToBrowsedNews(entity);
-        entity.setHfflag(1);
-        dataRepository.addNewsViewed(entity);
+//        entity.setHfflag(1);
+//        dataRepository.addNewsViewed(entity);
     }
 
 

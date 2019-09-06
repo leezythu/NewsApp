@@ -59,7 +59,7 @@
             android:layout_margin="5dp"/>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 <!--            <ImageView-->
@@ -69,15 +69,23 @@
 <!--                android:id="@+id/imgs"-->
 <!--                android:scaleType="centerCrop"-->
 <!--                android:contentDescription="TODO" />-->
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/image2"
-                android:scaleType="centerCrop"/>
-            <VideoView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/videos"/>
+                android:orientation="vertical">
+                <VideoView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/videos"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/image2"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"/>
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="match_parent"
@@ -89,6 +97,44 @@
             android:id="@+id/mycontentview"
             android:textSize="15sp"
             />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image3"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mycontentview2"
+            android:textSize="15sp"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/image4"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mycontentview3"
+            android:textSize="15sp"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

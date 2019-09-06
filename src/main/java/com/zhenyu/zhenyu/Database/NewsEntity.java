@@ -60,6 +60,9 @@ public class NewsEntity implements Cloneable{
     @ColumnInfo(name = "viewTime")
     private long viewTime;
 
+    @ColumnInfo(name = "videourl")
+    private String videourl;
+
 
     public NewsEntity(){
         this.newsid = "1"; this.stringkeywords = "";
@@ -70,10 +73,11 @@ public class NewsEntity implements Cloneable{
         publisher = "";
         hfflag = 0;
         viewTime = 0;
+        videourl = "";
     }
 
     public NewsEntity(String newsid, List<String> image, String publishTime, String title,
-                      String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, int flag){
+                      String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime ,String publisher,String videourl, int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -87,6 +91,7 @@ public class NewsEntity implements Cloneable{
         this.publisher = publisher;
         this.viewTime = entryTime;
         this.hfflag = 0;
+        this.videourl = videourl;
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}
@@ -102,6 +107,7 @@ public class NewsEntity implements Cloneable{
     public void setEntryTime(long entryTime){ this.entryTime = entryTime; }
     public void setHfflag(int hfflag){ this.hfflag = hfflag;}
     public void setViewTime(long viewTime){ this.viewTime = viewTime; }
+    public void setVideourl(String videourl){this.videourl = videourl;}
 
     public String getPublisher(){return  this.publisher;}
     public String getNewsid(){return this.newsid;}
@@ -114,7 +120,7 @@ public class NewsEntity implements Cloneable{
     public int getFlag(){ return flag; }
     public String getStringkeywords() {return this.stringkeywords;}
     public long getEntryTime() {return entryTime; }
-
+    public String getVideourl(){return videourl;}
     public int getHfflag() {
         return hfflag;
     }

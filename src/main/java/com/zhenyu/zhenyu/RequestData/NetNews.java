@@ -37,6 +37,7 @@ public class NetNews {
         private String newsID;
         private ArrayList<Orgs> organizations;
         private String publisher;
+        private String video;
 
         class KeyWords{
             private double score;
@@ -107,7 +108,7 @@ public class NetNews {
         Matcher m = pattern.matcher(temp.image);
         while (m.find())
             w.add(m.group(1));
-        return new NewsEntity(temp.newsID, w, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, flag);
+        return new NewsEntity(temp.newsID, w, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, temp.video,flag);
     }
 
     public List<NewsEntity> toNewsList(int flag){
