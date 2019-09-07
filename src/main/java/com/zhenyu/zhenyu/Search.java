@@ -1,8 +1,12 @@
 package com.zhenyu.zhenyu;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -10,49 +14,86 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.zhenyu.zhenyu.Database.AppDatabase;
+import com.zhenyu.zhenyu.NewsPages.HFpages.H_SectionsPagerAdapter;
+import com.zhenyu.zhenyu.NewsPages.searchGadget.S_SectionsPagerAdapter;
 import com.zhenyu.zhenyu.NewsPages.searchGadget.Searchpage;
-import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
+
+import java.util.ArrayList;
 
 public class Search extends AppCompatActivity {
-    private AppBarConfiguration mAppBarConfiguration;
-    private SectionsPagerAdapter sectionsPagerAdapter;
-
-    private String[] mStrs = {"aaa", "bbb", "ccc", "airsaid"};
+    private S_SectionsPagerAdapter sectionsPagerAdapter;
+    private ArrayList<Integer> current=new ArrayList<Integer>();
+    private ArrayList<Integer>notuse=new ArrayList<Integer>();
+    private DataRepository dataRepository;
     private SearchView mSearchView;
-    private ListView mListView;
-
+    String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        this.setTheme(R.style.Default);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.search_main);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        key = bundle.getString("keyword");
+        initViewPage();
+
+        initsearch();
+        dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
+
+//        Button btn1 = findViewById(R.id.button1);
+//        btn1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int ss = 0;
+//                try{
+//                    ss=dataRepository.getLikedNews().getValue().size();
+//                }catch (Exception e){
+//                    ss = -1;
+//                }
+//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        Button btn2 = findViewById(R.id.button2);
+//        btn2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int ss = 0;
+//                try{
+//                    ss=dataRepository.getHistoricalNews().getValue().size();
+//                }catch (Exception e){
+//                    ss = -1;
+//                }
+//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+    }
+    public void initsearch(){
         mSearchView = (SearchView) findViewById(R.id.searchView);
-//        mListView = (ListView) findViewById(R.id.listView);
-//        mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mStrs));
-//        mListView.setTextFilterEnabled(true);
-
-
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        blankfragment fragment = blankfragment.newInstance("page1","search");
-        /* SearchFragment fragment=new SearchFragment(); */
-        transaction.add(R.id.search_res_fragment, (Fragment) fragment, "dynamicFragment");
-        transaction.commit();
-
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             // 当点击搜索按钮时触发该方法
             @Override
             public boolean onQueryTextSubmit(String query) {
+                key=query;
+                Intent intent = new Intent(getApplicationContext(), Search.class);
+                Bundle bundle = new Bundle();
+                String keyword=query;
+                bundle.putString("keyword",keyword);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
                 if(query.length() > 0) {
-                    Toast.makeText(getApplicationContext(), "搜索内容为：" + query, Toast.LENGTH_LONG).show();
-                    FragmentManager manager = getSupportFragmentManager();
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    Searchpage fragment = Searchpage.newInstance(0, "天");
-                    /* SearchFragment fragment=new SearchFragment(); */
-                    transaction.replace(R.id.search_res_fragment, (Fragment) fragment, "dynamicFragment");
-                    transaction.commit();
+                    Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
                     mSearchView.setIconified(true);
                     return true;
                 }
@@ -75,5 +116,18 @@ public class Search extends AppCompatActivity {
             }
         });
 
+}
+    public void initViewPage() {
+        current.add(0);
+        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(configuration);
+        Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
+        sectionsPagerAdapter = new S_SectionsPagerAdapter(this, current, notuse, getSupportFragmentManager(),key);
+        ViewPager viewPager = findViewById(R.id.h_view_pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        TabLayout tabs = findViewById(R.id.h_tabs);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabs.setTabMode(TabLayout.MODE_FIXED);
+        tabs.setupWithViewPager(viewPager);
     }
 }

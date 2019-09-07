@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/appbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:background="@color/blueviolet"
+        android:queryHint="请输入搜索内容"
+        >
+
+    </SearchView>
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/appbg">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索历史"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"/>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:background="?attr/appbg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+        </ListView>
+
+</LinearLayout>
+

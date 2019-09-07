@@ -42,7 +42,6 @@ public class HFfragement  extends Fragment {
     private DateControl dateControl;
     private int mflag;
 
-
     public static HFfragement newInstance(int index, String category) {
         HFfragement fragment = new HFfragement();
         Bundle bundle = new Bundle();
