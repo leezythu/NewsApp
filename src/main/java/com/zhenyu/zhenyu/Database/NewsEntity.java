@@ -7,8 +7,10 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,22 @@ public class NewsEntity implements Cloneable{
         this.viewTime = entryTime;
         this.hfflag = 0;
         this.videourl = videourl;
+    }
+
+    public NewsEntity(BrowsedNews browsedNews){
+        this.newsid = browsedNews.getNewsid();
+        this.image = browsedNews.getImage();
+        this.publisher = browsedNews.getPublisher();
+        this.title = browsedNews.getTitle();
+        this.content = browsedNews.getContent();
+        this.flag = browsedNews.getFlag();
+        this.categories = browsedNews.getCategories();
+        this.keyscore = browsedNews.getKeyscore();
+        this.stringkeywords = browsedNews.getStringkeywords();
+        this.entryTime = new Date().getTime();
+        this.viewTime = new Date().getTime();
+        this.videourl = browsedNews.getVideourl();
+        this.hfflag = 1;
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}

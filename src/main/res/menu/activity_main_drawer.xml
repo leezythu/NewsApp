@@ -7,13 +7,13 @@
         <item android:title="我的">
             <menu>
                 <item
-                    android:id="@+id/nav_share"
-                    android:icon="@mipmap/history"
-                    android:title="@string/menu_history" />
-                <item
                     android:id="@+id/nav_collection"
                     android:icon="@mipmap/collection"
                     android:title="@string/menu_collection" />
+                <item
+                    android:id="@+id/nav_clear"
+                    android:icon="@mipmap/clear"
+                    android:title="@string/menu_clear" />
             </menu>
         </item>
         <item
@@ -21,17 +21,21 @@
             android:icon="@mipmap/moon"
             android:title="@string/menu_night" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-        <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:id="@+id/nav_day"
+            android:icon="@mipmap/sun"
+            android:title="@string/menu_day" />
+        <!--        <item-->
+        <!--            android:id="@+id/nav_gallery"-->
+        <!--            android:icon="@drawable/ic_menu_gallery"-->
+        <!--            android:title="@string/menu_gallery" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_slideshow"-->
+        <!--            android:icon="@drawable/ic_menu_slideshow"-->
+        <!--            android:title="@string/menu_slideshow" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_tools"-->
+        <!--            android:icon="@drawable/ic_menu_manage"-->
+        <!--            android:title="@string/menu_tools" />-->
     </group>
 
 

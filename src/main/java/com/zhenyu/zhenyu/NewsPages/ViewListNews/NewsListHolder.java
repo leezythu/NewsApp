@@ -22,6 +22,7 @@ import com.zhenyu.zhenyu.utils.tools;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.Random;
 
 public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private TextView titleView;
@@ -45,7 +46,9 @@ public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnCl
         dateView.setText(newsEntity.getPublishTime());
         categoryv.setText(newsEntity.getCategories());
         idx = newsEntity.getNewsid();
-        String imageUri = "https://hellorfimg.zcool.cn/preview260/224921422.jpg";
+
+        Random random = new Random();
+
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
 
         //浏览过的新闻变为灰色
@@ -55,6 +58,18 @@ public class NewsListHolder extends RecyclerView.ViewHolder implements View.OnCl
         DisplayImageOptions options = tools.initOptions();
         List<String> imgurl = newsEntity.getImage();
         if(imgurl.size() < 1) {
+            int choice = 109;
+            int bigimg = random.nextInt(2);
+            switch (bigimg){
+                case 0:
+                    choice = 1057 + random.nextInt(26);
+                    break;
+                case 1:
+                    choice = 151 + random.nextInt(50);
+                    break;
+            }
+
+            String imageUri = "https://picsum.photos/id/"+ choice +"/200";
             imageLoader.displayImage(imageUri, imageView, options);
 //            imageView.setVisibility(View.GONE);
         }else{

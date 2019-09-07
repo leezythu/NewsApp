@@ -7,39 +7,40 @@
     android:background="?attr/appbg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="?attr/searchview"/>
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
-        android:background="@color/blueviolet"
+        android:background="?attr/searchview"
         android:queryHint="请输入搜索内容"
         >
 
     </SearchView>
 
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/appbg">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="搜索历史"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"/>
-        <ListView
-            android:id="@+id/listView"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:background="?attr/appbg"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" >
+        android:text="搜索历史"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"/>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/appbg"
 
-        </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+    </ListView>
 
 </LinearLayout>
 

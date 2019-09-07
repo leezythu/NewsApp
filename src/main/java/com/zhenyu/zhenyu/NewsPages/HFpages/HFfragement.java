@@ -2,6 +2,7 @@ package com.zhenyu.zhenyu.NewsPages.HFpages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhenyu.zhenyu.DataRepository;
 import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.BrowsedNews;
+import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.NewsPages.HFpages.HFViewList.HFNewsListAdapter;
 import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
 import com.zhenyu.zhenyu.NewsPages.ViewListNews.RecyclerItemClickListener;
@@ -27,6 +31,8 @@ import com.zhenyu.zhenyu.R;
 import com.zhenyu.zhenyu.SingleNews;
 import com.zhenyu.zhenyu.utils.DateControl;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 public class HFfragement  extends Fragment {
@@ -106,10 +112,12 @@ public class HFfragement  extends Fragment {
                         Intent intent = new Intent(getContext(), SingleNews.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("newsid",newpageid);
+                        Gson gson = new Gson();
+                        String sobj = gson.toJson(mnewsAdapter.getAnews(position));
+                        bundle.putString("object", sobj);
 
                         intent.putExtras(bundle);
                         startActivity(intent);
-
                     }
 
                     @Override public void onLongItemClick(View view, int position) {

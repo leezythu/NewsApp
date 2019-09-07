@@ -4,6 +4,7 @@ import android.graphics.drawable.shapes.PathShape;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.zhenyu.zhenyu.Database.BrowsedNews;
 import com.zhenyu.zhenyu.Database.NewsEntity;
 import com.zhenyu.zhenyu.Database.StringListConverter;
 import com.zhenyu.zhenyu.user.UserProfile;
@@ -118,6 +119,68 @@ public class NetNews {
         HashSet<String> block = userProfile.getBlockingWords();
         for(int i = 0 ; i < entityNum; i++) {
             NewsEntity temp = toNewsEntity(i, flag, block);
+            if(temp == null)
+                continue;
+            res.add(temp);
+        }
+        return res;
+    }
+
+
+
+
+    public BrowsedNews toBrowsedNewsEntity(int index, int flag, HashSet<String> blocks, String wkey){
+        int keywordCnt = 0;
+        NewsData temp;
+        try {
+            temp = this.data.get(index);
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Index is out of bound");
+            return null;
+        }
+
+        HashMap<String, Double> keyscores = new HashMap<>();
+        for(NewsData.KeyWords tt: temp.keywords){
+            keyscores.put(tt.word, tt.score);
+            if(blocks.contains(tt.word))
+                return null;
+        }
+
+        String stringkeywords = wkey;
+
+        try{
+//            String tstr = temps.toString();
+//            String code = tools.getEncoding(tstr);
+//            stringkeywords = new String(temps.toString().getBytes(code),StandardCharsets.UTF_8);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        if(temp.publisher.equals("其他")) {
+            try {
+                NewsData.Orgs pubOrg = temp.organizations.get(0);
+                temp.publisher = pubOrg.mention;
+            } catch (Exception e) {
+                e.getMessage();
+            }
+        }
+        Gson gson = new Gson();
+        List<String> w = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(https?://[\\d\\w/.]+)[\\s,\\]]");
+        Matcher m = pattern.matcher(temp.image);
+        while (m.find())
+            w.add(m.group(1));
+        return new BrowsedNews(temp.newsID, w, temp.publishTime, temp.title, temp.content, temp.category, keyscores, stringkeywords, new Date().getTime(),temp.publisher, temp.video,flag);
+    }
+    public List<BrowsedNews> toBrowsedNewsList(int flag, String wkey){
+        int entityNum = data.size();
+        List<BrowsedNews> res = new ArrayList<>();
+        UserProfile userProfile = UserProfile.getInstance();
+        HashSet<String> block = userProfile.getBlockingWords();
+        for(int i = 0 ; i < entityNum; i++) {
+            BrowsedNews temp = toBrowsedNewsEntity(i, flag, block, wkey);
             if(temp == null)
                 continue;
             res.add(temp);

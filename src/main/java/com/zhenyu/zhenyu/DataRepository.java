@@ -106,6 +106,9 @@ public class DataRepository {
 
     public LiveData<List<NewsEntity>> getSearchResult(String keyword){ return appDatabase.getNewsEntityDao().searchNewsByOneKeyword(keyword);}
     public LiveData<List<NewsEntity>> getSearchFormat(String keyword){ return appDatabase.getNewsEntityDao().searchFormat(keyword); }
+
+    public LiveData<List<BrowsedNews>> loadBrowsedSearchSimple(){ return  appDatabase.getBrowsedNewsDao().getsearchSimple();}
+    public LiveData<List<BrowsedNews>> loadBrowsedSearch(String keys){ return appDatabase.getBrowsedNewsDao().getsearchres(keys);}
     public void removeByKeywords(String mkeys){
         appDatabase.getNewsEntityDao().removeByKeys(mkeys);
     }

@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -44,11 +45,15 @@ import com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil;
 import com.zhenyu.zhenyu.utils.shareUtils;
 import com.zhenyu.zhenyu.utils.tools;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatImages;
 import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatMoment;
@@ -71,8 +76,15 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_news);
 
+        UserProfile profile = UserProfile.getInstance();
+        if(profile.getThememode().equals("1"))
+            setTheme(R.style.ThemeNight);
+        else {
+            setTheme(R.style.Default);
+        }
+
+        setContentView(R.layout.activity_single_news);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("NewsApp");
@@ -99,11 +111,23 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         });
 
 
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         newsid = bundle.getString("newsid");
+
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
         logController = LogController.getInstance(null);
+        entity = dataRepository.loadNewsById(newsid);
+
+        try {
+            entity.getImage().size();
+        }catch (Exception e){
+            Gson gson = new Gson();
+            Type mapType = new TypeToken<NewsEntity>() {}.getType();
+            entity = gson.fromJson(bundle.getString("object"), mapType);
+        }
+
 
         if(!imgins) {
             shareUtils.initImageLoader(getApplicationContext());
@@ -140,14 +164,39 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         });
     }
     public void initpage(){
-        entity = dataRepository.loadNewsById(newsid);
 
         TextView titleview = findViewById(R.id.titleview);
         TextView contentview = findViewById(R.id.mycontentview);
         TextView timeView = findViewById(R.id.timeview);
         TextView sourceView = findViewById(R.id.sourceview);
+        TextView contenview2 = findViewById(R.id.mycontentview2);
+        TextView contentview3 = findViewById(R.id.mycontentview3);
+        TextView contentview4 = findViewById(R.id.mycontentview4);
         //    private TextView titleview;
         //    private TextView contentview;
+
+
+        String rawcontent = entity.getContent();
+        Pattern pattern = Pattern.compile("\\n[\\s]*");
+        Matcher matcher = pattern.matcher(rawcontent);
+        String replacement = "\n        ";
+        String parareplacement = "\n        #";
+        StringBuffer strn = new StringBuffer();
+        strn.append("        ");
+
+        int huanhangcnt = 0;
+        int paragraphcnt = 0;
+        while (matcher.find()){
+            huanhangcnt += 1;
+            if(huanhangcnt % 2 == 0 && paragraphcnt < 3){
+                paragraphcnt += 1;
+                matcher.appendReplacement(strn, parareplacement);
+            }else {
+                matcher.appendReplacement(strn, replacement);
+            }
+        }
+        matcher.appendTail(strn);
+        String[] splitcontent = strn.toString().split("#");
 
         ImageView imageView = findViewById(R.id.image2);
         ImageView imageView1 = findViewById(R.id.image3);
@@ -157,22 +206,102 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         DisplayImageOptions options = tools.initOptions();
         if(imgurl.size() < 1) {
             imageView.setVisibility(View.GONE);
+            StringBuilder buffer1 = new StringBuilder();
+            for(int i = 0; i < splitcontent.length;i++)
+                buffer1.append(splitcontent[i]);
+            contentview.setText(buffer1.toString());
+            contenview2.setVisibility(View.GONE);
+            contentview3.setVisibility(View.GONE);
+            contentview4.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "image doesn't exist", Toast.LENGTH_LONG).show();
         }else{
             ImageLoader imageLoader = ImageLoader.getInstance();
             switch (imgurl.size()) {
+                case 0:
+                    StringBuilder buffer1 = new StringBuilder();
+                    for(int i = 0; i < splitcontent.length;i++)
+                        buffer1.append(splitcontent[i]);
+                    contentview.setText(buffer1.toString());
+                    contenview2.setVisibility(View.GONE);
+                    contentview3.setVisibility(View.GONE);
+                    contentview4.setVisibility(View.GONE);
+                    break;
                 case 1:
+                    contentview.setText(splitcontent[0]);
+                    if(splitcontent.length == 2)
+                        contenview2.setText(splitcontent[1]);
+                    else if(splitcontent.length >= 3){
+                        StringBuilder buffer = new StringBuilder();
+                        for(int i = 1; i < splitcontent.length;i++)
+                            buffer.append(splitcontent[i]);
+                        contenview2.setText(buffer.toString());
+                    }
+                    else
+                        contenview2.setVisibility(View.GONE);
+                    contentview3.setVisibility(View.GONE);
+                    contentview4.setVisibility(View.GONE);
+
                     imageLoader.displayImage(imgurl.get(0), imageView, options);
                     imageView1.setVisibility(View.GONE);
                     imageView2.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), imgurl.get(0), Toast.LENGTH_LONG).show();
                     break;
                 case 2:
+                    contentview.setText(splitcontent[0]);
+                    if(splitcontent.length == 1){
+                        contenview2.setVisibility(View.GONE);
+                        contentview3.setVisibility(View.GONE);
+                    }
+                    else if(splitcontent.length == 2){
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setVisibility(View.GONE);
+                    }
+                    else if(splitcontent.length == 3){
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setText(splitcontent[2]);
+                    }
+                    else{
+                        contenview2.setText(splitcontent[1]);
+                        StringBuilder buffer = new StringBuilder();
+                        for(int i = 2; i < splitcontent.length;i++)
+                            buffer.append(splitcontent[i]);
+                        contentview3.setText(buffer.toString());
+                    }
+                    contentview4.setVisibility(View.GONE);
+
                     imageLoader.displayImage(imgurl.get(0), imageView, options);
                     imageLoader.displayImage(imgurl.get(1), imageView1, options);
                     imageView2.setVisibility(View.GONE);
                     break;
                 default:
+                    contentview.setText(splitcontent[0]);
+                    if(splitcontent.length == 1){
+                        contenview2.setVisibility(View.GONE);
+                        contentview3.setVisibility(View.GONE);
+                        contentview4.setVisibility(View.GONE);
+                    }
+                    if(splitcontent.length == 2) {
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setVisibility(View.GONE);
+                        contentview4.setVisibility(View.GONE);
+                    }
+                    else if(splitcontent.length == 3){
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setText(splitcontent[2]);
+                        contentview4.setVisibility(View.GONE);
+                    }
+                    else if(splitcontent.length == 4){
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setText(splitcontent[2]);
+                        contentview4.setText(splitcontent[3]);
+                    }else{
+                        contenview2.setText(splitcontent[1]);
+                        contentview3.setText(splitcontent[2]);
+                        StringBuilder buffer = new StringBuilder();
+                        for(int i = 3; i < splitcontent.length;i++)
+                            buffer.append(splitcontent[i]);
+                        contentview4.setText(buffer.toString());
+                    }
                     imageLoader.displayImage(imgurl.get(0), imageView, options);
                     imageLoader.displayImage(imgurl.get(1), imageView1, options);
                     imageLoader.displayImage(imgurl.get(2), imageView2, options);
@@ -180,19 +309,9 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
             }
         }
 
-        String rawcontent = entity.getContent();
-        Pattern pattern = Pattern.compile("\\n[\\s]*");
-        Matcher matcher = pattern.matcher(rawcontent);
-        String replacement = "\n        ";
-        StringBuffer strn = new StringBuffer();
-        strn.append("        ");
-        while (matcher.find()){
-            matcher.appendReplacement(strn, replacement);
-        }
-        matcher.appendTail(strn);
+
 
         titleview.setText(entity.getTitle());
-        contentview.setText(strn.toString());
         timeView.setText(entity.getPublishTime());
         sourceView.setText(entity.getPublisher());
 
@@ -201,7 +320,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
         //设置视频控制器,组件可以控制视频的播放，暂停，快进，组件，不需要你实现
         MediaController mc = new MediaController(this);
         videoView.setMediaController(mc);
-        String netPlayUrl="http://baobab.wdjcdn.com/145076769089714.mp4";
+        String netPlayUrl="ht   tp://baobab.wdjcdn.com/145076769089714.mp4";
         Uri uri = Uri.parse(netPlayUrl);
         videoView.setVideoURI(uri);//设置视频的播放地址，网络地址。播放网络视频
 //        //播放本地视频

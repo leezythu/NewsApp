@@ -1,28 +1,22 @@
 package com.zhenyu.zhenyu;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zhenyu.zhenyu.Database.AppDatabase;
-import com.zhenyu.zhenyu.NewsPages.HFpages.H_SectionsPagerAdapter;
 import com.zhenyu.zhenyu.NewsPages.searchGadget.S_SectionsPagerAdapter;
-import com.zhenyu.zhenyu.NewsPages.searchGadget.Searchpage;
+import com.zhenyu.zhenyu.RequestData.Reception;
+import com.zhenyu.zhenyu.user.UserProfile;
+import com.zhenyu.zhenyu.utils.ViewDialog;
 
 import java.util.ArrayList;
 
@@ -32,49 +26,33 @@ public class Search extends AppCompatActivity {
     private ArrayList<Integer>notuse=new ArrayList<Integer>();
     private DataRepository dataRepository;
     private SearchView mSearchView;
+    private ViewDialog viewDialog;
+
     String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        this.setTheme(R.style.Default);
+        UserProfile profile = UserProfile.getInstance();
+        if(profile.getThememode().equals("1"))
+            setTheme(R.style.ThemeNight);
+        else {
+            setTheme(R.style.Default);
+        }
+//        this.setTheme(R.style.Default);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.search_main);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         key = bundle.getString("keyword");
+
+        viewDialog = new ViewDialog(this);
+
         initViewPage();
 
         initsearch();
         dataRepository = DataRepository.getInstance(AppDatabase.getDatabase(null, null));
 
-//        Button btn1 = findViewById(R.id.button1);
-//        btn1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int ss = 0;
-//                try{
-//                    ss=dataRepository.getLikedNews().getValue().size();
-//                }catch (Exception e){
-//                    ss = -1;
-//                }
-//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        Button btn2 = findViewById(R.id.button2);
-//        btn2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int ss = 0;
-//                try{
-//                    ss=dataRepository.getHistoricalNews().getValue().size();
-//                }catch (Exception e){
-//                    ss = -1;
-//                }
-//                Toast.makeText(getApplicationContext(), "database size:" + ss, Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
     }
     public void initsearch(){
@@ -84,22 +62,42 @@ public class Search extends AppCompatActivity {
             // 当点击搜索按钮时触发该方法
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getApplicationContext(), "test query", Toast.LENGTH_LONG).show();
                 key=query;
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                Bundle bundle = new Bundle();
-                String keyword=query;
-                bundle.putString("keyword",keyword);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
+                Reception.searchForNews(key, getApplicationContext());
+
+                viewDialog.showDialog();
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //...here i'm waiting 5 seconds before hiding the custom dialog
+                        //...you can do whenever you want or whenever your work is done
+
+                        Intent intent = new Intent(getApplicationContext(), Search.class);
+                        Bundle bundle = new Bundle();
+                        String keyword=key;
+                        bundle.putString("keyword",keyword);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        finish();
+
+                        viewDialog.hideDialog();
+                    }
+                }, 1000);
+
+
                 if(query.length() > 0) {
-                    Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "what==" + key, Toast.LENGTH_LONG).show();
                     mSearchView.setIconified(true);
                     return true;
                 }
                 else{
                     return false;
                 }
+
+
 
             }
 
@@ -119,9 +117,9 @@ public class Search extends AppCompatActivity {
 }
     public void initViewPage() {
         current.add(0);
-        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
-        ImageLoader.getInstance().init(configuration);
-        Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
+//        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+//        ImageLoader.getInstance().init(configuration);
+//        Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
         sectionsPagerAdapter = new S_SectionsPagerAdapter(this, current, notuse, getSupportFragmentManager(),key);
         ViewPager viewPager = findViewById(R.id.h_view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);

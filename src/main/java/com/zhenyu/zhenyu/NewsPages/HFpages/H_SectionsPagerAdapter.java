@@ -11,7 +11,8 @@ import com.zhenyu.zhenyu.NewsPages.PlaceHolderFragment;
 import java.util.ArrayList;
 
 public class H_SectionsPagerAdapter extends FragmentPagerAdapter {
-    private static final String[] TAB_CONTENT = new String[]{"收藏","历史"};
+    private static final String[] TAB_CONTENT = new String[]{"#收藏#","#历史#"};
+    private static final String[] TAB_TITLE = new String[]{"收藏", "历史"};
     private final Context mContext;
     private ArrayList<Integer> cur;
     private ArrayList<Integer>notuse;
@@ -37,7 +38,7 @@ public class H_SectionsPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return TAB_CONTENT[cur.get(position)];
+        return TAB_TITLE[cur.get(position)];
     }
 
     @Override

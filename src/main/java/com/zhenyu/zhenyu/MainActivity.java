@@ -2,20 +2,19 @@ package com.zhenyu.zhenyu;
 
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,9 +31,9 @@ import com.zhenyu.zhenyu.Database.AppDatabase;
 import com.zhenyu.zhenyu.Database.AppExecutors;
 import com.zhenyu.zhenyu.NewsPages.SectionsPagerAdapter;
 import com.zhenyu.zhenyu.RequestData.Reception;
+import com.zhenyu.zhenyu.user.UserProfile;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter sectionsPagerAdapter;
 
 
-
     private ArrayList<Integer> current = new ArrayList<Integer>();
     private ArrayList<Integer> notuse = new ArrayList<Integer>();
+    String nightmode;
 
 
     @Override
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setTheme(R.style.Default);
+        nightmode = "0";
         setContentView(R.layout.activity_main);
         AppDatabase.getDatabase(getApplicationContext(), new AppExecutors());
         DataRepository.getInstance(AppDatabase.getDatabase(getApplicationContext(), null));
@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         initViewPage();
         initLogin();
+
+        init_night();
+        init_day();
+        init_clear();
     }
 
 
@@ -235,6 +239,93 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    public void init_night(){
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem night = menu.findItem(R.id.nav_night);
+        Drawable newIcon = (Drawable)night.getIcon();
+        newIcon.mutate().setColorFilter(Color.argb(255, 200, 200, 200), PorterDuff.Mode.SRC_IN);
+        night.setIcon(newIcon);
+        night.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                UserProfile userProfile = UserProfile.getInstance();
+                userProfile.setThememode("1");
+                nightmode="1";
+                Toast.makeText(getApplicationContext(), "您点击了夜间模式", Toast.LENGTH_LONG).show();
+                setTheme(R.style.ThemeNight);
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                TabLayout tabs = findViewById(R.id.tabs);
+                Toolbar toolbar = findViewById(R.id.toolbar);
+                toolbar.setBackgroundColor(Color.BLACK);
+                tabs.setBackgroundColor(Color.BLACK);
+                navigationView.setBackgroundColor(Color.BLACK);
+
+                initDrawer();
+//                initTabs();
+                initViewPage();
+//                initLogin();
+                return true;
+            }
+        });
+//        Toast.makeText(getApplicationContext(), "nightnightmode"+nightmode, Toast.LENGTH_LONG).show();
+    }
+
+    public void init_day(){
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem day = menu.findItem(R.id.nav_day);
+        Drawable newIcon = (Drawable)day.getIcon();
+        newIcon.mutate().setColorFilter(Color.argb(255, 200, 200, 200), PorterDuff.Mode.SRC_IN);
+        day.setIcon(newIcon);
+        day.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                nightmode="0";
+                UserProfile userProfile = UserProfile.getInstance();
+                userProfile.setThememode("0");
+                Toast.makeText(getApplicationContext(), "您点击了白天模式", Toast.LENGTH_LONG).show();
+                setTheme(R.style.Default);
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                TabLayout tabs = findViewById(R.id.tabs);
+                Toolbar toolbar = findViewById(R.id.toolbar);
+                toolbar.setBackgroundColor(Color.parseColor("#8A2BE2"));
+                tabs.setBackgroundColor(Color.parseColor("#9370DB"));
+                navigationView.setBackgroundColor(Color.WHITE);
+                initDrawer();
+//                initTabs();
+                initViewPage();
+//                initLogin();
+                return true;
+            }
+        });
+    }
+
+    public void init_clear(){
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem clear = menu.findItem(R.id.nav_clear);
+        Drawable newIcon = (Drawable)clear.getIcon();
+        newIcon.mutate().setColorFilter(Color.argb(255, 200, 200, 200), PorterDuff.Mode.SRC_IN);
+        clear.setIcon(newIcon);
+        clear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getApplicationContext(), "您点击了清除缓存", Toast.LENGTH_LONG).show();
+                //add your code here
+
+                initDrawer();
+                initTabs();
+                initViewPage();
+//                initLogin();
+                return true;
+            }
+        });
     }
 
 }

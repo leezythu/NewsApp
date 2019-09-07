@@ -18,6 +18,8 @@
     <string name="menu_history">历史记录</string>
     <string name="menu_collection">收藏</string>
     <string name="menu_night">夜间模式</string>
+    <string name="menu_clear">清空缓存</string>
+    <string name="menu_day">白天模式</string>
 
     <string name="tab_text_shouye">首页</string>
     <string name="tab_text_tuijian">推荐</string>

@@ -57,7 +57,7 @@ public class BrowsedNews {
 
 
     public BrowsedNews(String newsid, List<String> image, String publishTime, String title,
-                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String videourl, int flag){
+                       String content, String categories, HashMap<String, Double> keyscores, String stringkeywords, long entryTime , String publisher, String videourl,int flag){
         this.newsid = newsid;
         this.image = image;
         this.publishTime = publishTime;
@@ -94,6 +94,7 @@ public class BrowsedNews {
         this.flag = newsEntity.getFlag();
         this.entryTime = new Date().getTime();
         this.videourl = newsEntity.getVideourl();
+        this.image = newsEntity.getImage();
     }
 
     public void setPublisher(String publisher){this.publisher = publisher;}

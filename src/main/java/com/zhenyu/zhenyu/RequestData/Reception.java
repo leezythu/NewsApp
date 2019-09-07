@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhenyu.zhenyu.Database.AppDatabase;
@@ -28,6 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.zhenyu.zhenyu.utils.searchcache;
 
 public class Reception {
     private static Reception mInstance;
@@ -375,5 +377,47 @@ public class Reception {
         });
     }
 
+
+    public static void searchForNews(@NonNull final String key, Context context){
+
+        final Context icon = context;
+        Toast.makeText(context, "call search ", Toast.LENGTH_LONG).show();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api2.newsminer.net/svc/news/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GetRequest_Interfece service = retrofit.create(GetRequest_Interfece.class);
+        Map<String, String> param = new HashMap<>();
+        param.put("words", key);
+        param.put("size", "30");
+        Call<NetNews> model = service.getCall(param);
+
+        final String tempKey = key;
+        model.enqueue(new Callback<NetNews>() {
+            @Override
+            public void onResponse(Call<NetNews> call, Response<NetNews> response) {
+                Toast.makeText(icon, "response", Toast.LENGTH_LONG).show();
+                if(response.body() == null) {
+                    return;
+                }
+                else {
+                    searchcache ws = searchcache.getInstance();
+                    List<BrowsedNews> st = response.body().toBrowsedNewsList(3, tempKey);
+                    if(st.size() == 0)
+                        ws.cleardata();
+                    else
+                        ws.setCondata(st);
+//                    Toast.makeText(icon, "get news:"+response.body().toBrowsedNewsList(3, tempKey).size(), Toast.LENGTH_SHORT).show();
+//                    appDatabase.getBrowsedNewsDao().addBrowsedNewsAll(response.body().toBrowsedNewsList(3, tempKey));
+//                    Toast.makeText(icon, "recieve data:"+st.size() + st.get(0).getImage().toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<NetNews> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.zhenyu.zhenyu.Database;
 
+import android.provider.ContactsContract;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -21,7 +23,6 @@ public interface BrowsedNewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addBrowsedNewsAll(List<BrowsedNews> allnews);
 
-
     @Query("select * FROM BrowsedNews where flag = 1 order by entryTime desc")
     LiveData<List<BrowsedNews>> getLikedNews();
 
@@ -36,4 +37,10 @@ public interface BrowsedNewsDao {
 
     @Query("delete from BrowsedNews")
     void deleteAll();
+
+    @Query("select * FROM BrowsedNews where flag = 3 and stringkeywords = :key1 order by entryTime")
+    LiveData<List<BrowsedNews>> getsearchres(String key1);
+
+    @Query("select * FROM BrowsedNews where flag = 3 order by entryTime")
+    LiveData<List<BrowsedNews>> getsearchSimple();
 }

@@ -1,73 +1,90 @@
 package com.zhenyu.zhenyu;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.zhenyu.zhenyu.Database.AppDatabase;
-import com.zhenyu.zhenyu.NewsPages.HFpages.H_SectionsPagerAdapter;
-import com.zhenyu.zhenyu.NewsPages.ViewListNews.RecyclerItemClickListener;
-import com.zhenyu.zhenyu.NewsPages.searchGadget.S_SectionsPagerAdapter;
-import com.zhenyu.zhenyu.NewsPages.searchGadget.Searchpage;
+import com.zhenyu.zhenyu.RequestData.Reception;
+import com.zhenyu.zhenyu.user.UserProfile;
+import com.zhenyu.zhenyu.utils.ViewDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchHistory extends AppCompatActivity {
     private SearchView mSearchView;
-    private List<String> searchHistory=new ArrayList<String>();
     private  ListView listView;
+    private ViewDialog viewDialog;
+    private UserProfile userProfile;
+
     String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        this.setTheme(R.style.Default);
+        userProfile = userProfile.getInstance();
+
+        if(userProfile.getThememode().equals("1"))
+            setTheme(R.style.ThemeNight);
+        else {
+            setTheme(R.style.Default);
+        }
+//        this.setTheme(R.style.Default);
+
+
+        viewDialog = new ViewDialog(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.search_h_main);
         initsearch();
 
     }
     public void initsearch() {
-        searchHistory.add("侯哥");
-        searchHistory.add("你的小可爱");
         mSearchView = (SearchView) findViewById(R.id.searchView);
         // 设置搜索文本监听
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             // 当点击搜索按钮时触发该方法
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchHistory.add(query);
+                Toast.makeText(getApplicationContext(), "test query:"+query, Toast.LENGTH_LONG).show();
                 key = query;
-                Intent intent = new Intent(getApplicationContext(), Search.class);
-                Bundle bundle = new Bundle();
-                String keyword = query;
-                bundle.putString("keyword", keyword);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                Reception.searchForNews(key, getApplicationContext());
+//                searchHistory.add(query);
+                if(!userProfile.historyContains(query))
+                    userProfile.addsearchHistory(query);
+                viewDialog.showDialog();
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //...here i'm waiting 5 seconds before hiding the custom dialog
+                        //...you can do whenever you want or whenever your work is done
+                        viewDialog.hideDialog();
+
+                        Intent intent = new Intent(getApplicationContext(), Search.class);
+                        Bundle bundle = new Bundle();
+                        String keyword = key;
+                        bundle.putString("keyword", keyword);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+
+                    }
+                }, 1000);
+
+
                 if (query.length() > 0) {
-                    Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
+//                  Toast.makeText(getApplicationContext(), "key==" + key, Toast.LENGTH_LONG).show();
                     mSearchView.setIconified(true);
                     return true;
                 } else {
@@ -90,7 +107,7 @@ public class SearchHistory extends AppCompatActivity {
         });
 
 
-        ArrayAdapter<String>adapter=new ArrayAdapter<String>(this,R.layout.listview_text,R.id.listview_text,searchHistory);
+        ArrayAdapter<String>adapter=new ArrayAdapter<String>(this,R.layout.listview_text,R.id.listview_text,userProfile.getSearchHistoty());
         listView = (ListView) findViewById(R.id.listView);
         listView.setDividerHeight(0);
         listView.setAdapter(adapter);

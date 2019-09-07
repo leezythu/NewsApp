@@ -29,6 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private int count;
     public void set_cur( ArrayList<Integer> current){
         cur=current;
+        count = current.size();
     }
     public void set_notuse( ArrayList<Integer> notuse){
         this.notuse=notuse;

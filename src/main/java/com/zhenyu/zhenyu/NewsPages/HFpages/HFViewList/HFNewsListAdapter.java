@@ -45,4 +45,5 @@ public class HFNewsListAdapter extends RecyclerView.Adapter<HFListHolder> {
     public String getHolderId(int position){
         return currentNews.get(position).getNewsid();
     }
+    public BrowsedNews getAnews(int position){ return  currentNews.get(position);}
 }

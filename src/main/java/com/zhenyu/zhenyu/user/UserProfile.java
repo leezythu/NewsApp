@@ -2,11 +2,13 @@ package com.zhenyu.zhenyu.user;
 
 import android.content.ContentUris;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -18,6 +20,8 @@ public class UserProfile {
     //category喜好
     private HashMap<String, Double> catePreference;
     private HashSet<String> blockingWords;
+    private List<String> searchHistoty;
+    private String thememode;
     private static UserProfile mInstance;
 
     private UserProfile(){
@@ -32,7 +36,8 @@ public class UserProfile {
             catePreference.put(va, 0.);
         blockingWords = new HashSet<>();
         dislikedWords = new HashSet<>();
-
+        searchHistoty = new ArrayList<>();
+        thememode = "0";
     }
 
     public static UserProfile getInstance(){
@@ -40,8 +45,14 @@ public class UserProfile {
             mInstance = new UserProfile();
         return mInstance;
     }
+    public void setThememode(String mode){ this.thememode = mode;}
+    public String getThememode(){return this.thememode;}
 
-
+    public void addsearchHistory(String his){
+        searchHistoty.add(his);
+    }
+    public List<String> getSearchHistoty(){return searchHistoty;}
+    public boolean historyContains(String key){ return searchHistoty.contains(key); }
     //用户点击， 关键词添加
     public void addkeys(String category, HashMap<String, Double> ms){
         catePreference.put(category, catePreference.get(category)+1.);
