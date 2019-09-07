@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
+
+import retrofit2.http.FieldMap;
 
 public class UserProfile {
     private HashMap<String, Double> lovewords;
@@ -18,6 +21,8 @@ public class UserProfile {
     private HashSet<String> blockingWords;
     private List<String> searchHistoty;
     private String thememode;
+    private final double weightdecay;
+    private HashSet<String> recentLover;
     private static UserProfile mInstance;
 
     private UserProfile(){
@@ -34,6 +39,8 @@ public class UserProfile {
         searchHistoty = new ArrayList<>();
         lovewords = new HashMap<>();
         thememode = "0";
+        weightdecay = 0.9;
+        recentLover = new HashSet<>();
     }
 
     public static UserProfile getInstance(){
@@ -52,10 +59,24 @@ public class UserProfile {
 
 
     public void addLoveWord(String words, double sco){
-        if(lovewords.containsKey(words))
-            lovewords.put(words, sco + lovewords.get(words));
+        for(String wd : recentLover) {
+            try {
+                lovewords.put(wd, lovewords.get(wd) - 1);
+            }catch (Exception e){
+                lovewords.remove(wd);
+            }
+        }
+        recentLover.clear();
+        if(lovewords.containsKey(words)) {
+            recentLover.add(words);
+            lovewords.put(words, sco + lovewords.get(words)+1);
+        }
         else
             lovewords.put(words, sco);
+    }
+
+    public Set<String> getLoveWordSet(){
+        return lovewords.keySet();
     }
 
     public String getLoveWord(){
@@ -63,12 +84,12 @@ public class UserProfile {
         double rm = 0.;
         Random w = new Random();
         double rd = (double)w.nextInt(100) / 100.;
-        for(Double db : catePreference.values())
+        for(Double db : lovewords.values())
             sums += Math.exp(db);
         if(sums < 0.5)
             return null;
         System.out.println("random is :" + rd);
-        for(Map.Entry<String, Double> entry : catePreference.entrySet()){
+        for(Map.Entry<String, Double> entry : lovewords.entrySet()){
             rm += Math.exp(entry.getValue())/sums;
             System.out.println("calculated sum : " + rm + " " + entry.getKey());
             if(rm >= rd)
@@ -77,10 +98,27 @@ public class UserProfile {
         return null;
     }
 
+    public void setWeightdecay(){
+        List<String> removelist = new ArrayList<>();
+        for(Map.Entry<String, Double> entry:lovewords.entrySet()){
+            double temp = entry.getValue() * weightdecay;
+            if(temp < 0.3)
+                removelist.add(entry.getKey());
+            else
+                lovewords.put(entry.getKey(), entry.getValue()*weightdecay);
+        }
+        for(String w:removelist)
+            lovewords.remove(w);
+    }
+
     //用户点击， 关键词添加
-    public void addkeys(String category, HashMap<String, Double> ms){
-        catePreference.put(category, catePreference.get(category)+1.);
-        Objects.requireNonNull(preferrence.get(category)).addKeyword(ms);
+
+    public void addcategoricalword(String category, String word, double sco){
+        try {
+            preferrence.get(category).addsingleword(word, sco);
+        }catch (Exception e){
+
+        }
     }
 
     //用户收藏， 关键词添加
@@ -89,10 +127,6 @@ public class UserProfile {
         Objects.requireNonNull(preferrence.get(category)).addFavorate(ms);
     }
 
-    //“首页”添加
-    public void addlikedall(HashMap<String, Double> ms){
-        preferrence.get("首页").addKeyword(ms);
-    }
 
     public String getFromLikedall(){
         return preferrence.get("首页").getUsedKeys();

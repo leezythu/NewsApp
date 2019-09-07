@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +61,7 @@ public class Reception {
                 .build();
         GetRequest_Interfece service = retrofit.create(GetRequest_Interfece.class);
         Map<String, String> Params = new HashMap<String, String>();
-        Params.put("size","10");
+        Params.put("size","13");
         if(categories != null)
             Params.put("categories",categories);
         if(word != null)
@@ -100,29 +101,29 @@ public class Reception {
         UserProfile userProfile = UserProfile.getInstance();
 
         Map<String, String> Params = new HashMap<String, String>();
-        Params.put("size","3");
+        Params.put("size","10");
         String resCategory;
 
-        if(categories != null) {
-            Params.put("categories", categories);
-            resCategory = categories;
-        }
-        else {
-            resCategory = userProfile.getCategory();
-            if(resCategory != null)
-                Params.put("categories", resCategory);
-        }
-
-        if(word != null)
-            Params.put("words",word);
-        else {
-            double w = Math.random();
-            if(w > 0.5) {
-                word = userProfile.getCategoricalKeyWords(resCategory);
-                if (word != null)
-                    Params.put("words", word);
+        Random random = new Random();
+        int ran = random.nextInt(10);
+        if(ran < 7){
+            String reword = userProfile.getLoveWord();
+            if(reword != null)
+                Params.put("words", reword);
+        }else{
+            String ccate = userProfile.getCategory();
+            if(ccate != null){
+                Params.put("category",ccate);
+                String reword = userProfile.getCategoricalKeyWords(ccate);
+                if(reword != null)
+                    Params.put("words", reword);
+            }else{
+                String reword = userProfile.getLoveWord();
+                if(reword != null)
+                    Params.put("words", reword);
             }
         }
+
 
         if(startDate != null)
             Params.put("startDate", startDate);
@@ -139,7 +140,7 @@ public class Reception {
                     return;
                 }
                 else {
-                    appDatabase.getNewsEntityDao().addNewsAll(response.body().toNewsList(2));
+                    appDatabase.getNewsEntityDao().addNewsAll(response.body().toRecommendedNewsList(2));
                 }
             }
             @Override

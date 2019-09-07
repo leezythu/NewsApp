@@ -48,6 +48,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,6 +70,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
     private NewsEntity entity;
     private VideoView videoView;
     private LogController logController;
+    private UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +87,17 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("NewsApp");
+        toolbar.setNavigationIcon(R.mipmap.back);
         toolbar.bringToFront();
 //        toolbar.setSubtitle("这里是子标题");
         toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
 //        toolbar.setLogo(R.drawable.round_more_horiz_24  );
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_single_news);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
@@ -130,6 +139,7 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
             shareUtils.initImageLoader(getApplicationContext());
             imgins = true;
         }
+        userProfile = UserProfile.getInstance();
         initpage();
         initbottonsheet();
 
@@ -328,8 +338,14 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 
 
         // handle user preference
-        UserProfile userProfile = UserProfile.getInstance();
-        userProfile.addkeys(entity.getCategories(), entity.getKeyscore());
+        for(Map.Entry<String, Double> entry: entity.getKeyscore().entrySet()){
+            if(entry.getKey().length() > 5)
+                continue;
+            if(entry.getValue() > 0.75) {
+                userProfile.addLoveWord(entry.getKey(), entry.getValue());
+                userProfile.addcategoricalword(entity.getCategories() ,entry.getKey(), entry.getValue());
+            }
+        }
         entity.setFlag(0);
         entity.setEntryTime(new Date().getTime());
         dataRepository.addNewsToBrowsedNews(entity);
@@ -393,7 +409,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                             List<String> targetText = HanLP.extractSummary(entity.getContent(), 2);
 
                             Toast.makeText(getApplicationContext(), targetText.get(0), Toast.LENGTH_LONG).show();
-
 
                             Bitmap textmap = shareUtils.textAsBitmap(entity.getContent(), 30);
                             Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
@@ -461,8 +476,16 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                 entity.setFlag(1);
                 entity.setEntryTime(new Date().getTime());
                 dataRepository.addNewsToBrowsedNews(entity);
-                UserProfile userProfile = UserProfile.getInstance();
-                userProfile.addFavorate(entity.getCategories(), entity.getKeyscore());
+
+                for(Map.Entry<String, Double> entry:entity.getKeyscore().entrySet()){
+                    if(entry.getKey().length() > 5)
+                        continue;
+                    if(entry.getValue() > 0.75) {
+                        userProfile.addLoveWord(entry.getKey(), entry.getValue());
+                        userProfile.addcategoricalword(entity.getCategories() ,entry.getKey(), entry.getValue());
+                    }
+                }
+
                 if(logController.getOnline().getValue()) {
                     Gson gson = new Gson();
                     Reception.uploadItem(LogController.getInstance(null).getUsername(), entity.getNewsid(), gson.toJson(entity));

@@ -94,6 +94,16 @@ public class PlaceHolderFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        String edate = dateControl.getFormatDate();
+        String sdate = dateControl.backday();
+        if(CategoryS.equals("首页"))
+            Reception.request(null, null, sdate, edate, 0);
+        else if(CategoryS.equals("推荐"))
+            Reception.request(null, null, sdate, edate, 0);
+        else
+            Reception.request(null, CategoryS, sdate, edate, pageViewModel.getMflag());
         RefreshLayout refreshLayout = (RefreshLayout)root.findViewById(R.id.refreshlays);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd hh:mm-ss");
         final String nowtime = simpleDateFormat.format(new Date());
@@ -106,6 +116,8 @@ public class PlaceHolderFragment extends Fragment {
                 if(CategoryS.equals("首页"))
                     Reception.request(null, null, startdate, enddate, 0);
                 else if(CategoryS.equals("推荐")) {
+                        UserProfile userProfile = UserProfile.getInstance();
+                        userProfile.setWeightdecay();
                         Reception.requestRecommended(null, null, startdate, enddate);
                         Reception.requestRecommended(null, null, startdate, enddate);
                         Reception.requestRecommended(null, null, startdate, nowtime);

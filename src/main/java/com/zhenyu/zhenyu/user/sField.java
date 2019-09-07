@@ -18,13 +18,20 @@ public class sField {
         mKeyword = new HashMap<>();
     }
 
-    public void addKeyword(HashMap<String, Double> keys){
+    public void addKeywords(HashMap<String, Double> keys){
         for(Map.Entry<String, Double> entry: keys.entrySet()){
             if(mKeyword.containsKey(entry.getKey()))
                 mKeyword.put(entry.getKey(), entry.getValue() + mKeyword.get(entry.getKey()));
             else
                 mKeyword.put(entry.getKey(), entry.getValue());
         }
+    }
+
+    public void addsingleword(String word, double sco){
+        if(mKeyword.containsKey(word))
+            mKeyword.put(word, sco + mKeyword.get(word));
+        else
+            mKeyword.put(word, sco);
     }
 
     public boolean containsKey(String str){ return mKeyword.containsKey(str);}
