@@ -1,11 +1,7 @@
 package com.zhenyu.zhenyu.user;
 
-import android.content.ContentUris;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +10,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class UserProfile {
-    private HashSet<String> dislikedWords;
+    private HashMap<String, Double> lovewords;
     //单领域喜好
     private HashMap<String, sField> preferrence;
     //category喜好
@@ -35,8 +31,8 @@ public class UserProfile {
         for(String va : cates)
             catePreference.put(va, 0.);
         blockingWords = new HashSet<>();
-        dislikedWords = new HashSet<>();
         searchHistoty = new ArrayList<>();
+        lovewords = new HashMap<>();
         thememode = "0";
     }
 
@@ -53,6 +49,34 @@ public class UserProfile {
     }
     public List<String> getSearchHistoty(){return searchHistoty;}
     public boolean historyContains(String key){ return searchHistoty.contains(key); }
+
+
+    public void addLoveWord(String words, double sco){
+        if(lovewords.containsKey(words))
+            lovewords.put(words, sco + lovewords.get(words));
+        else
+            lovewords.put(words, sco);
+    }
+
+    public String getLoveWord(){
+        double sums = 0.;
+        double rm = 0.;
+        Random w = new Random();
+        double rd = (double)w.nextInt(100) / 100.;
+        for(Double db : catePreference.values())
+            sums += Math.exp(db);
+        if(sums < 0.5)
+            return null;
+        System.out.println("random is :" + rd);
+        for(Map.Entry<String, Double> entry : catePreference.entrySet()){
+            rm += Math.exp(entry.getValue())/sums;
+            System.out.println("calculated sum : " + rm + " " + entry.getKey());
+            if(rm >= rd)
+                return entry.getKey();
+        }
+        return null;
+    }
+
     //用户点击， 关键词添加
     public void addkeys(String category, HashMap<String, Double> ms){
         catePreference.put(category, catePreference.get(category)+1.);
@@ -74,11 +98,6 @@ public class UserProfile {
         return preferrence.get("首页").getUsedKeys();
     }
 
-
-    //屏蔽词添加
-    public void adddislike(String wd){
-        dislikedWords.add(wd);
-    }
 
     //屏蔽 类别+ 关键词添加
     public void adddislikewords(String category, HashMap<String, Double> wds){
@@ -127,8 +146,6 @@ public class UserProfile {
             if(rm >= rd)
                 return entry.getKey();
         }
-
-
         return null;
     }
 

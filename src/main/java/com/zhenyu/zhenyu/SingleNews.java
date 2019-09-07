@@ -10,8 +10,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +30,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hankcs.hanlp.HanLP;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -48,12 +47,10 @@ import com.zhenyu.zhenyu.utils.tools;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatImages;
 import static com.zhenyu.zhenyu.utils.ShareMultiImageToWeChatUtil.shareWechatMoment;
@@ -372,7 +369,6 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 //                    Toast.makeText(getApplicationContext(), "您没有安装微信", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }else {}
-
                 if (entity.getImage().size() < 1) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
@@ -393,6 +389,12 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                             }
                             checkPermission();
                             Uri uri = shareUtils.getImageUri(SingleNews.this, loadedImage);
+
+                            List<String> targetText = HanLP.extractSummary(entity.getContent(), 2);
+
+                            Toast.makeText(getApplicationContext(), targetText.get(0), Toast.LENGTH_LONG).show();
+
+
                             Bitmap textmap = shareUtils.textAsBitmap(entity.getContent(), 30);
                             Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
                             ArrayList<Uri> urislist = new ArrayList<>();
