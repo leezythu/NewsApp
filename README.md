@@ -1,2 +1,2 @@
 # NewsApp
-NewsApp online v 0.1
+NewsApp online v 0.2
