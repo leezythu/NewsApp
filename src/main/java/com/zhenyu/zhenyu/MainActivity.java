@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.bringToFront();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -265,10 +266,9 @@ public class MainActivity extends AppCompatActivity {
                 tabs.setBackgroundColor(Color.BLACK);
                 navigationView.setBackgroundColor(Color.BLACK);
 
-                initDrawer();
-//                initTabs();
+
                 initViewPage();
-//                initLogin();
+
                 return true;
             }
         });

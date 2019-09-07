@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/appbg"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".SingleNews"
     tools:showIn="@layout/activity_single_news">
@@ -29,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/titleview"
-                android:text="@string/large_text"
+                android:text="lalal"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 />

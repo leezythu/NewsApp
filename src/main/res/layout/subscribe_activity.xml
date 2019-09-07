@@ -113,11 +113,12 @@
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="14.0px" />
 r
+
                 <TextView
                     android:id="@+id/back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="110dp"
+                    android:layout_width="97dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="130dp"
                     android:layout_marginTop="180dp"
                     android:background="@mipmap/log_in"
                     android:gravity="center"

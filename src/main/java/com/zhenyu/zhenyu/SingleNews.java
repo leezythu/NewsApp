@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hankcs.hanlp.HanLP;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -88,10 +89,17 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("NewsApp");
+        toolbar.setNavigationIcon(R.mipmap.back);
         toolbar.bringToFront();
 //        toolbar.setSubtitle("这里是子标题");
         toolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
 //        toolbar.setLogo(R.drawable.round_more_horiz_24  );
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_single_news);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
@@ -393,6 +401,13 @@ public class SingleNews extends AppCompatActivity implements View.OnClickListene
                             }
                             checkPermission();
                             Uri uri = shareUtils.getImageUri(SingleNews.this, loadedImage);
+
+
+                            List<String> targetText = HanLP.extractSummary(entity.getContent(), 2);
+
+                            Toast.makeText(getApplicationContext(), targetText.get(0), Toast.LENGTH_LONG).show();
+
+
                             Bitmap textmap = shareUtils.textAsBitmap(entity.getContent(), 30);
                             Uri textUri = shareUtils.getImageUri(SingleNews.this, textmap);
                             ArrayList<Uri> urislist = new ArrayList<>();
