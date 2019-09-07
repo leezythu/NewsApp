@@ -225,7 +225,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 //                Toast.makeText(getApplicationContext(), "您点击了头像", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), Search.class);
+                Intent intent = new Intent(getApplicationContext(), SearchHistory.class);
+                Bundle bundle = new Bundle();
+                String keyword="null";
+                bundle.putString("keyword",keyword);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
             }

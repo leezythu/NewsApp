@@ -52,7 +52,7 @@ public class Searchpage extends Fragment {
         String keys = "中国";
         if(getArguments() != null) {
             keys = getArguments().getString("KeyWords");
-            keys = "中国";
+            keys = "军事";
             Toast.makeText(getContext(), "network request", Toast.LENGTH_LONG).show();
             Reception.request(keys, null, null, null, 3);
             viewModel.searchFor(keys);
